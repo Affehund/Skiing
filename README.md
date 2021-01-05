@@ -1,10 +1,7 @@
-[Showcase](https://i.imgur.com/VvB4ifv.gif)
-
 ## Skiing Mod
 You like skiing? Now you can do it in minecraft!
 
 ##### This mod provides you with:
-
 *   Skis (in all 8 wood types of minecraft vanilla)
 *   Ski Sticks (you are much faster when you hold one in your mainhand and one in your offhand)
 *   Snow Shovel (break a 3x3 area of snow at once)
