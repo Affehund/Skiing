@@ -1,6 +1,6 @@
 <h2>Skiing Mod</h2>
 <p>You like skiing? Now you can do it in minecraft!</p>
-<p>&nbsp;</p>
+
 <h5>This mod provides you with:</h5>
 <ul>
 <li>Skis (in all 8 wood types of minecraft vanilla)</li>
