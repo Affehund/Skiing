@@ -1,0 +1,130 @@
+{
+	"credit": "Created by Affehund",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "skiing:item/ski_stick",
+		"particle": "skiing:item/ski_stick"
+	},
+	"elements": [
+		{
+			"name": "stick",
+			"from": [7.5, 0, 7.5],
+			"to": [8.5, 20, 8.5],
+			"faces": {
+				"north": {"uv": [0, 0, 0.5, 10], "texture": "#0"},
+				"east": {"uv": [0.5, 0.5, 1, 10.5], "texture": "#0"},
+				"south": {"uv": [1, 1, 1.5, 11], "texture": "#0"},
+				"west": {"uv": [1.5, 1.5, 2, 11.5], "texture": "#0"},
+				"up": {"uv": [1, 0.5, 0.5, 0], "texture": "#0"},
+				"down": {"uv": [1.5, 0, 1, 0.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "handle",
+			"from": [6.5, 15.25, 6.5],
+			"to": [9.5, 16.25, 9.5],
+			"faces": {
+				"north": {"uv": [2, 1.5, 3.5, 2], "texture": "#0"},
+				"east": {"uv": [3, 0, 4.5, 0.5], "texture": "#0"},
+				"south": {"uv": [3, 0.5, 4.5, 1], "texture": "#0"},
+				"west": {"uv": [3, 1, 4.5, 1.5], "texture": "#0"},
+				"up": {"uv": [3, 1.5, 1.5, 0], "texture": "#0"},
+				"down": {"uv": [3.5, 2, 2, 3.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "north_cube",
+			"from": [6.5, 1.25, 5.5],
+			"to": [9.5, 2, 6.5],
+			"faces": {
+				"north": {"uv": [2, 3.5, 3.5, 4], "texture": "#0"},
+				"east": {"uv": [1, 0.5, 1.5, 1], "texture": "#0"},
+				"south": {"uv": [3.5, 3.5, 5, 4], "texture": "#0"},
+				"west": {"uv": [2.5, 5.5, 3, 6], "texture": "#0"},
+				"up": {"uv": [5, 2, 3.5, 1.5], "texture": "#0"},
+				"down": {"uv": [5, 2, 3.5, 2.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "south_cube",
+			"from": [6.5, 1.25, 9.5],
+			"to": [9.5, 2, 10.5],
+			"faces": {
+				"north": {"uv": [3.5, 2.5, 5, 3], "texture": "#0"},
+				"east": {"uv": [3, 5.5, 3.5, 6], "texture": "#0"},
+				"south": {"uv": [3.5, 3, 5, 3.5], "texture": "#0"},
+				"west": {"uv": [3.5, 5.5, 4, 6], "texture": "#0"},
+				"up": {"uv": [3.5, 4.5, 2, 4], "texture": "#0"},
+				"down": {"uv": [5, 4, 3.5, 4.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "east_cube",
+			"from": [9.5, 1.25, 6.5],
+			"to": [10.5, 2, 9.5],
+			"faces": {
+				"north": {"uv": [4, 5.5, 4.5, 6], "texture": "#0"},
+				"east": {"uv": [2, 4.5, 3.5, 5], "texture": "#0"},
+				"south": {"uv": [4.5, 5.5, 5, 6], "texture": "#0"},
+				"west": {"uv": [3.5, 4.5, 5, 5], "texture": "#0"},
+				"up": {"uv": [5, 1.5, 4.5, 0], "texture": "#0"},
+				"down": {"uv": [2.5, 5, 2, 6.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "west_cube",
+			"from": [5.5, 1.25, 6.5],
+			"to": [6.5, 2, 9.5],
+			"faces": {
+				"north": {"uv": [5, 5.5, 5.5, 6], "texture": "#0"},
+				"east": {"uv": [2.5, 5, 4, 5.5], "texture": "#0"},
+				"south": {"uv": [5.5, 5.5, 6, 6], "texture": "#0"},
+				"west": {"uv": [4, 5, 5.5, 5.5], "texture": "#0"},
+				"up": {"uv": [5.5, 1.5, 5, 0], "texture": "#0"},
+				"down": {"uv": [5.5, 1.5, 5, 3], "texture": "#0"}
+			}
+		},
+		{
+			"name": "middle_cube",
+			"from": [6.5, 1.25, 7.55],
+			"to": [9.5, 2, 8.45],
+			"faces": {
+				"north": {"uv": [5, 3, 6.5, 3.5], "texture": "#0"},
+				"east": {"uv": [5.5, 0, 6, 0.5], "texture": "#0"},
+				"south": {"uv": [5, 3.5, 6.5, 4], "texture": "#0"},
+				"west": {"uv": [5.5, 0.5, 6, 1], "texture": "#0"},
+				"up": {"uv": [6.5, 4.5, 5, 4], "texture": "#0"},
+				"down": {"uv": [6.5, 4.5, 5, 5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, -12, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, -12, 0]
+		},
+		"firstperson_righthand": {
+			"translation": [1, -8, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [1, -8, 0]
+		},
+		"ground": {
+			"translation": [0,5,0]
+		},
+		"gui": {
+			"translation": [0, -1.5, 0],
+			"rotation": [0, 45, 0],
+			"scale": [0.75, 0.75, 0.75]
+		}
+	},
+	"groups": [0, 1,
+		{
+			"name": "bottom",
+			"origin": [8, 8, 8],
+			"children": [2, 3, 4, 5, 6]
+		}
+	]
+}

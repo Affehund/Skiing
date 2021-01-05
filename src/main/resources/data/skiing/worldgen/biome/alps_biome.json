@@ -1,0 +1,152 @@
+{
+	"surface_builder": "minecraft:grass",
+	"depth": 0.4,
+	"scale": 1.5,
+	"temperature": 0,
+	"downfall": 1,
+	"precipitation": "snow",
+	"temperature_modifier": "frozen",
+	"category": "icy",
+	"player_spawn_friendly": true,
+	"effects": {
+		"sky_color": 10269682,
+		"fog_color": 10730465,
+		"water_color": 3695804,
+		"water_fog_color": 65873,
+		"mood_sound": {
+			"sound": "minecraft:ambient.cave",
+			"tick_delay": 6000,
+			"block_search_extent": 8,
+			"offset": 2
+		}
+	},
+	"starts": [
+		"minecraft:village_snowy",
+		"minecraft:mineshaft",
+		"minecraft:igloo"
+	],
+	"spawners": {
+		"monster": [
+			{
+				"type": "minecraft:spider",
+				"weight": 100,
+				"minCount": 4,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:zombie",
+				"weight": 95,
+				"minCount": 4,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:zombie_villager",
+				"weight": 5,
+				"minCount": 1,
+				"maxCount": 1
+			},
+			{
+				"type": "minecraft:skeleton",
+				"weight": 20,
+				"minCount": 4,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:creeper",
+				"weight": 100,
+				"minCount": 4,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:stray",
+				"weight": 80,
+				"minCount": 4,
+				"maxCount": 4
+			}
+		],
+		"creature": [
+			{
+				"type": "minecraft:wolf",
+				"weight": 5,
+				"minCount": 2,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:sheep",
+				"weight": 10,
+				"minCount": 4,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:cow",
+				"weight": 10,
+				"minCount": 4,
+				"maxCount": 4
+			},
+			{
+				"type": "minecraft:rabbit",
+				"weight": 10,
+				"minCount": 2,
+				"maxCount": 3
+			},
+			{
+				"type": "minecraft:polar_bear",
+				"weight": 1,
+				"minCount": 1,
+				"maxCount": 2
+			},
+			{
+				"type": "minecraft:fox",
+				"weight": 5,
+				"minCount": 2,
+				"maxCount": 4
+			}
+		],
+		"ambient": [
+			{
+				"type": "minecraft:bat",
+				"weight": 10,
+				"minCount": 8,
+				"maxCount": 8
+			}
+		]
+	},
+	"spawn_costs": {
+	},
+	"carvers": {
+		"air": [
+			"minecraft:cave",
+			"minecraft:canyon"
+		]
+	},
+	"features": [
+		[
+			"minecraft:lake_water"
+		],
+		[
+			"minecraft:ice_patch"
+		],
+		[
+			"minecraft:ore_dirt",
+			"minecraft:ore_gravel",
+			"minecraft:ore_granite",
+			"minecraft:ore_diorite",
+			"minecraft:ore_andesite",
+			"minecraft:ore_coal",
+			"minecraft:ore_iron",
+			"minecraft:ore_gold",
+			"minecraft:ore_redstone",
+			"minecraft:ore_diamond",
+			"minecraft:ore_lapis",
+			"minecraft:disk_sand",
+			"minecraft:disk_clay",
+			"minecraft:disk_gravel"
+		],
+		[
+			"minecraft:spruce_snowy"
+		],
+		[
+			"minecraft:freeze_top_layer"
+		]
+	]
+}

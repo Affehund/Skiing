@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " s ",
+    " s ",
+    " n "
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "skiing:ski_stick"
+  }
+}

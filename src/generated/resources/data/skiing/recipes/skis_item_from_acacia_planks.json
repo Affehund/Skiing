@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p  ",
+    " p ",
+    "  p"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:acacia_planks"
+    }
+  },
+  "result": {
+    "item": "skiing:skis_item",
+    "nbt": "{Type:\"ACACIA\"}"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " b ",
+    " s ",
+    " s "
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:bucket"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "skiing:snow_shovel"
+  }
+}

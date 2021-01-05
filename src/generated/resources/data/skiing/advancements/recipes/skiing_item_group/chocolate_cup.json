@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "skiing:chocolate_cup"
+    ]
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:cocoa_beans"
+          }
+        ]
+      }
+    },
+    "has_item2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:milk_bucket"
+          }
+        ]
+      }
+    },
+    "has_item3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:bucket"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "skiing:chocolate_cup"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item",
+      "has_item2",
+      "has_item3",
+      "has_the_recipe"
+    ]
+  ]
+}
