@@ -1,4 +1,4 @@
-![](https://i.imgur.com/VvB4ifv.gif)
+[Showcase](https://i.imgur.com/VvB4ifv.gif)
 
 ## Skiing Mod
 You like skiing? Now you can do it in minecraft!
