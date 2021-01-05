@@ -31,11 +31,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.TeleportationRepositioner;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -78,6 +74,7 @@ public class SkisEntity extends Entity {
 
 	public SkisEntity(EntityType<SkisEntity> entityType, World world) {
 		super(entityType, world);
+		this.stepHeight = 1.0F;
 		this.preventEntitySpawning = true;
 	}
 
@@ -158,16 +155,15 @@ public class SkisEntity extends Entity {
 		this.deltaRotation = 0;
 		this.dataManager.set(FLYING, false);
 	}
-	
 
 	@Override
 	public void tick() {
 		this.updateStatus();
-		
+
 		if (this.onGround) {
 			this.dataManager.set(FLYING, false);
 		}
-		
+
 		if (this.getTimeSinceHit() > 0) {
 			this.setTimeSinceHit(this.getTimeSinceHit() - 1);
 		}
@@ -180,7 +176,6 @@ public class SkisEntity extends Entity {
 		if (this.canPassengerSteer()) {
 			this.controlEntity();
 			this.updateMotion();
-			this.updateStep();
 			this.move(MoverType.SELF, this.getMotion());
 		} else {
 			this.setMotion(Vector3d.ZERO);
@@ -291,54 +286,6 @@ public class SkisEntity extends Entity {
 		this.deltaRotation *= momentum;
 	}
 
-	private void updateStep() {
-		if (this.dataManager.get(STEP_COOLDOWN) > 0) {
-			if (this.onGround) {
-				this.dataManager.set(STEP_COOLDOWN, 0);
-			} else {
-				this.dataManager.set(STEP_COOLDOWN, this.dataManager.get(STEP_COOLDOWN) - 1);
-			}
-			this.setMotion(this.getMotion().mul(1, 0, 1));
-		} else if (this.status == Status.ON_SNOW && this.onGround) {
-			Vector3d lookVec = this.getLookVec().normalize();
-			Vector3d motion = this.getMotion().mul(1, 0, 1).normalize();
-
-			if (motion.lengthSquared() > 0) {
-				double angle = Math.abs(Math.acos(lookVec.dotProduct(motion)));
-				if (angle < Math.toRadians(60)) {
-					double mul = (1 / Math.max(Math.abs(motion.x), Math.abs(motion.z)));
-					if (Double.isFinite(mul)) {
-						motion = motion.mul(mul, mul, mul);
-						Vector3d start = new Vector3d(this.getPosX(), this.getPosY() + 0.01, this.getPosZ());
-						Vector3d end = new Vector3d(start.x + motion.x, start.y, start.z + motion.z);
-						BlockRayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(start, end,
-								RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-						if (result.getType() == RayTraceResult.Type.BLOCK) {
-							BlockPos pos = result.getPos();
-							BlockState state = this.world.getBlockState(pos);
-							BlockState stateUp = this.world.getBlockState(pos.up());
-							if ((ModTags.Blocks.SNOWY_BLOCKS.contains(state.getBlock())
-									|| ModTags.Blocks.SNOWY_BLOCKS.contains(stateUp.getBlock()))
-									&& stateUp.getCollisionShape(this.world, pos.up()).isEmpty()) {
-								VoxelShape shape = state.getCollisionShape(this.world, pos);
-								Vector3d hitStart = new Vector3d(result.getHitVec().x, pos.getY() + 1.2,
-										result.getHitVec().z);
-								Vector3d hitEnd = new Vector3d(result.getHitVec().x, pos.getY(), result.getHitVec().z);
-								BlockRayTraceResult target = shape.rayTrace(hitStart, hitEnd, pos);
-								if (target != null) {
-									Vector3d targetVec = target.getHitVec();
-									this.dataManager.set(STEP_COOLDOWN, 5);
-									this.setPosition(this.getPosX(), Math.max(this.getPosY(), targetVec.y + 0.2),
-											this.getPosZ());
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 	public void updateInputs(boolean leftInputDown, boolean rightInputDown, boolean forwardInputDown,
 			boolean backInputDown, boolean boostDown, boolean flyDown) {
 		this.leftInputDown = leftInputDown;
@@ -371,7 +318,11 @@ public class SkisEntity extends Entity {
 		if (!this.isPassenger()) {
 			if (onGroundIn) {
 				if (this.fallDistance > 3) {
-					this.onLivingFall(this.fallDistance, 1);
+					if (this.status != SkisEntity.Status.ON_LAND) {
+						this.fallDistance = 0.0F;
+						return;
+					}
+					this.onLivingFall(this.fallDistance, 1.0F);
 				}
 				this.fallDistance = 0.0F;
 			} else if (!this.world.getFluidState(this.getPosition().down()).isTagged(FluidTags.WATER) && y < 0.0D) {

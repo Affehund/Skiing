@@ -227,10 +227,11 @@ public class SkiingMod {
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 
-			expert.add(new BasicTrade(new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
+			expert.add(new BasicTrade(new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2),
+					20, 10, 1f));
 			expert.add(new BasicTrade(randomSkisItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
 			expert.add(new BasicTrade(randomSkisItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
-			
+
 			master.add(new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(Items.SNOWBALL, 16), 20, 10));
 			master.add(new BasicTrade(getRandomIntInRange(3, 5), new ItemStack(Items.SNOW_BLOCK, 8), 20, 10));
 			master.add(new BasicTrade(new ItemStack(Items.SNOW_BLOCK, 8), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
