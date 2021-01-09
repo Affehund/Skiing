@@ -27,6 +27,8 @@ public class ModConstants {
 		public static final String PULLOVER = "pullover";
 		
 		public static final String ALPS_BIOME = "alps_biome";
+		
+		public static final String SKI_RACK = "ski_rack";
 	}
 
 	public static final String ARMOR_PATH = ModConstants.MOD_ID + ":textures/models/armor/";

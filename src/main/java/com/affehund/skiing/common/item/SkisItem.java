@@ -5,7 +5,10 @@ import java.util.function.Predicate;
 
 import com.affehund.skiing.common.entity.SkisEntity;
 import com.affehund.skiing.common.entity.SkisEntity.SkisType;
+import com.affehund.skiing.core.ModConstants;
+import com.affehund.skiing.core.utils.TextUtils;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -20,6 +23,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class SkisItem extends Item {
@@ -43,7 +49,6 @@ public class SkisItem extends Item {
 					playerIn.getBoundingBox().expand(vector3d.scale(5.0D)).grow(1.0D), field_219989_a);
 			if (!list.isEmpty()) {
 				Vector3d vector3d1 = playerIn.getEyePosition(1.0F);
-
 				for (Entity entity : list) {
 					AxisAlignedBB axisalignedbb = entity.getBoundingBox()
 							.grow((double) entity.getCollisionBorderSize());
@@ -78,11 +83,10 @@ public class SkisItem extends Item {
 
 	public static SkisEntity.SkisType getSkisType(ItemStack stack) {
 		try {
-			return SkisEntity.SkisType.valueOf(stack.getOrCreateTag().getString(NBT_TYPE));
+			return SkisEntity.SkisType.getByName(stack.getOrCreateTag().getString(NBT_TYPE));
 		} catch (Exception e) {
 			return SkisType.ACACIA;
 		}
-
 	}
 
 	public void setSkisType(ItemStack stack, String type) {
@@ -94,16 +98,16 @@ public class SkisItem extends Item {
 		if (isInGroup(group)) {
 			for (SkisEntity.SkisType type : SkisEntity.SkisType.values()) {
 				ItemStack stack = new ItemStack(this);
-				setSkisType(stack, type.name());
+				setSkisType(stack, type.getName());
 				items.add(stack);
 			}
 		}
 	}
 
-//	@Override
-//	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-//		String type = getSkisType(stack).name().toLowerCase();
-//		String string = "Type: " + type.substring(0, 1).toUpperCase() + type.substring(1);
-//		tooltip.add(new StringTextComponent(string));
-//	}
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		String type = getSkisType(stack).getName();
+		tooltip.add(new StringTextComponent(
+				TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "type").getString() + ": " + type).mergeStyle(TextFormatting.GRAY));
+	}
 }

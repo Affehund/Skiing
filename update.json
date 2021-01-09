@@ -1,0 +1,11 @@
+{
+  "homepage": "https://www.curseforge.com/minecraft/mc-mods/skiing",
+  "1.16.4": {
+    "skiing-1.16.4-1.0.0": "changelog",
+    "skiing-1.16.4-1.1.0": "changelog"
+  },
+  "promos": {
+    "1.16.4-latest": "skiing-1.16.4-1.1.0",
+    "1.16.4-recommended": "skiing-1.16.4-1.1.0"
+  }
+}

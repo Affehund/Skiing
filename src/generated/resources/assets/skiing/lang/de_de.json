@@ -1,5 +1,7 @@
 {
   "_comment": "Translation (de_de) by Affehund",
+  "block.skiing.ski_rack": "Ski-St\u00E4nder",
+  "container.skiingBlock{skiing:ski_rack}": "Ski-St\u00E4nder",
   "entity.minecraft.villager.skiing.skis_merchant": "Ski H\u00E4ndler",
   "entity.skiing.skis_entity": "Skier",
   "item.skiing.chocolate_cup": "Kakao Tasse",
@@ -8,6 +10,7 @@
   "item.skiing.skis_item": "Skier",
   "item.skiing.snow_shovel": "Schnee Schaufel",
   "itemGroup.skiing_item_group": "Skiing",
-  "skiing.tooltip.color": "Farbe",
-  "skiing.tooltip.snow_shovel": "Mit diesem Gegenstand kannst du eine 3x3-Fl\u00E4che aus Schnee auf einmal abbauen."
+  "skiing.tooltip.snow_shovel": "Mit diesem Gegenstand kannst du eine 3x3-Fl\u00E4che aus Schnee auf einmal abbauen.",
+  "skiing.tooltip.type": "Typ",
+  "tile.skiingski_rack": "Ski-St\u00E4nder"
 }

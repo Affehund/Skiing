@@ -2,12 +2,15 @@ package com.affehund.skiing.common.entity;
 
 import javax.annotation.Nonnull;
 
+import com.affehund.skiing.common.block.SkiRackBlock.SkiRackType;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.core.data.gen.ModTags;
 import com.affehund.skiing.core.init.ModEntities;
 import com.affehund.skiing.core.init.ModItems;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +19,6 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -48,8 +50,6 @@ public class SkisEntity extends Entity {
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(SkisEntity.class,
 			DataSerializers.FLOAT);
 	private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.createKey(SkisEntity.class,
-			DataSerializers.VARINT);
-	private static final DataParameter<Integer> STEP_COOLDOWN = EntityDataManager.createKey(SkisEntity.class,
 			DataSerializers.VARINT);
 	private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(SkisEntity.class,
 			DataSerializers.BOOLEAN);
@@ -92,7 +92,6 @@ public class SkisEntity extends Entity {
 		this.dataManager.register(TIME_SINCE_HIT, 0);
 		this.dataManager.register(DAMAGE_TAKEN, 0.0F);
 		this.dataManager.register(FORWARD_DIRECTION, 1);
-		this.dataManager.register(STEP_COOLDOWN, 0);
 		this.dataManager.register(FLYING, false);
 		this.dataManager.register(SKIS_TYPE, SkisEntity.SkisType.ACACIA.ordinal());
 	}
@@ -346,7 +345,7 @@ public class SkisEntity extends Entity {
 			if (isCreative || this.getDamageTaken() > 40.0F) {
 				if (!isCreative && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
 					ItemStack stack = new ItemStack(ModItems.SKIS_ITEM.get());
-					((SkisItem) stack.getItem()).setSkisType(stack, this.getSkisType().name());
+					((SkisItem) stack.getItem()).setSkisType(stack, this.getSkisType().getName());
 					this.entityDropItem(stack);
 				}
 				this.remove();
@@ -412,27 +411,54 @@ public class SkisEntity extends Entity {
 	}
 
 	public static enum SkisType {
-		ACACIA(Items.ACACIA_PLANKS, new ResourceLocation("minecraft", "textures/block/acacia_planks.png")),
-		BIRCH(Items.BIRCH_PLANKS, new ResourceLocation("minecraft", "textures/block/birch_planks.png")),
-		CRIMSON(Items.CRIMSON_PLANKS, new ResourceLocation("minecraft", "textures/block/crimson_planks.png")),
-		DARK_OAK(Items.DARK_OAK_PLANKS, new ResourceLocation("minecraft", "textures/block/dark_oak_planks.png")),
-		JUNGLE(Items.JUNGLE_PLANKS, new ResourceLocation("minecraft", "textures/block/jungle_planks.png")),
-		OAK(Items.OAK_PLANKS, new ResourceLocation("minecraft", "textures/block/oak_planks.png")),
-		SPRUCE(Items.SPRUCE_PLANKS, new ResourceLocation("minecraft", "textures/block/spruce_planks.png")),
-		WARPED(Items.WARPED_PLANKS, new ResourceLocation("minecraft", "textures/block/warped_planks.png"));
+		ACACIA("acacia", Blocks.ACACIA_PLANKS, new ResourceLocation("textures/block/acacia_planks.png")),
+		BIRCH("birch", Blocks.BIRCH_PLANKS, new ResourceLocation("textures/block/birch_planks.png")),
+		CRIMSON("crimson", Blocks.CRIMSON_PLANKS, new ResourceLocation("textures/block/crimson_planks.png")),
+		DARK_OAK("dark_oak", Blocks.DARK_OAK_PLANKS, new ResourceLocation("textures/block/dark_oak_planks.png")),
+		JUNGLE("jungle", Blocks.JUNGLE_PLANKS, new ResourceLocation("textures/block/jungle_planks.png")),
+		OAK("oak", Blocks.OAK_PLANKS, new ResourceLocation("textures/block/oak_planks.png")),
+		SPRUCE("spruce", Blocks.SPRUCE_PLANKS, new ResourceLocation("textures/block/spruce_planks.png")),
+		WARPED("warped", Blocks.WARPED_PLANKS, new ResourceLocation("textures/block/warped_planks.png"));
 
-		public final Item item;
-		public final Item material;
-		public final ResourceLocation texture;
+		private final Item item;
+		private final String name;
+		private final Block plank;
+		private final ResourceLocation texture;
 
-		SkisType(Item material, ResourceLocation texture) {
+		SkisType(String name, Block plank, ResourceLocation texture) {
 			this.item = ModItems.SKIS_ITEM.get();
-			this.material = material;
+			this.name = name;
+			this.plank = plank;
 			this.texture = texture;
+
+		}
+
+		public Item getItem() {
+			return this.item;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+
+		public String toString() {
+			return this.name;
+		}
+
+		public Block getPlank() {
+			return this.plank;
+		}
+
+		public ResourceLocation getTexture() {
+			return this.texture;
 		}
 
 		public static SkisType getRandom() {
 			return values()[(int) (Math.random() * values().length)];
+		}
+		
+		public static SkisType getByName(String name) {
+			return SkisType.valueOf(name.toUpperCase());
 		}
 	}
 

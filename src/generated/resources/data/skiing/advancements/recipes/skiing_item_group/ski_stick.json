@@ -6,7 +6,7 @@
     ]
   },
   "criteria": {
-    "has_item": {
+    "has_stick": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -16,7 +16,7 @@
         ]
       }
     },
-    "has_item2": {
+    "has_nugget": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -35,8 +35,8 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_item2",
+      "has_stick",
+      "has_nugget",
       "has_the_recipe"
     ]
   ]

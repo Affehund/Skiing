@@ -1,18 +1,27 @@
 package com.affehund.skiing.core.init;
 
-import com.affehund.skiing.client.render.RenderSkisItem;
+import java.util.concurrent.Callable;
+
+import com.affehund.skiing.client.render.SkiRackISTER;
+import com.affehund.skiing.client.render.SkisItemISTER;
 import com.affehund.skiing.common.item.PulloverItem;
 import com.affehund.skiing.common.item.PulloverMaterial;
+import com.affehund.skiing.common.item.SkiRackItem;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.common.item.SnowShovel;
+import com.affehund.skiing.common.tile.SkiRackTileEntity;
 import com.affehund.skiing.core.ModConstants;
 import com.affehund.skiing.core.utils.DrinkableItem;
 
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.Items;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -34,10 +43,19 @@ public class ModItems {
 					new Item.Properties().maxDamage(1561).group(ModItemGroup.MOD_ITEM_GROUP)));
 
 	public static final RegistryObject<Item> SKIS_ITEM = ITEMS.register(ModConstants.RegistryStrings.SKIS_ITEM,
-			() -> new SkisItem(new Item.Properties().setISTER(() -> RenderSkisItem::new).maxStackSize(1)
+			() -> new SkisItem(new Item.Properties().setISTER(() -> SkisItemISTER::new).maxStackSize(1)
 					.group(ModItemGroup.MOD_ITEM_GROUP)));
 	
 	public static final RegistryObject<Item> SKI_STICK_ITEM = ITEMS.register(
 			ModConstants.RegistryStrings.SKI_STICK_ITEM,
 			() -> new Item(new Item.Properties().maxStackSize(2).group(ModItemGroup.MOD_ITEM_GROUP)));
+	
+	public static final RegistryObject<Item> SKIS_RACK = ITEMS.register(
+			ModConstants.RegistryStrings.SKI_RACK,
+			() -> new SkiRackItem(ModBlocks.SKI_RACK.get(), new Item.Properties().setISTER(() -> skiRackRenderer()).maxStackSize(1).group(ModItemGroup.MOD_ITEM_GROUP)));
+
+	@OnlyIn(Dist.CLIENT)
+	private static Callable<ItemStackTileEntityRenderer> skiRackRenderer() {
+		return () -> new SkiRackISTER<TileEntity>(() -> new SkiRackTileEntity());
+	}
 }

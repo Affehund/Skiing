@@ -1,0 +1,7 @@
+{
+	"parent": "skiing:block/ski_rack",
+	"textures": {
+		"0": "block/dark_oak_planks",
+		"particle": "block/dark_oak_planks"
+	}
+}

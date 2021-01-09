@@ -12,7 +12,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class SkisRenderer extends EntityRenderer<SkisEntity> {
 	protected final SkisModel model = new SkisModel();
 
@@ -51,6 +54,6 @@ public class SkisRenderer extends EntityRenderer<SkisEntity> {
 
 	@Override
 	public ResourceLocation getEntityTexture(SkisEntity entity) {
-		return entity.getSkisType().texture;
+		return entity.getSkisType().getTexture();
 	}
 }

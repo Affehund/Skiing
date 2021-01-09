@@ -6,17 +6,7 @@
     ]
   },
   "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:cocoa_beans"
-          }
-        ]
-      }
-    },
-    "has_item2": {
+    "has_milk": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -26,12 +16,22 @@
         ]
       }
     },
-    "has_item3": {
+    "has_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "item": "minecraft:bucket"
+          }
+        ]
+      }
+    },
+    "has_cocoa": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:cocoa_beans"
           }
         ]
       }
@@ -45,9 +45,9 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_item2",
-      "has_item3",
+      "has_milk",
+      "has_bucket",
+      "has_cocoa",
       "has_the_recipe"
     ]
   ]

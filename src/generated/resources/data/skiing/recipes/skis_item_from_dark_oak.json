@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p  ",
+    " p ",
+    "  p"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:dark_oak_planks"
+    }
+  },
+  "result": {
+    "item": "skiing:skis_item",
+    "nbt": "{Type:\"dark_oak\"}"
+  }
+}

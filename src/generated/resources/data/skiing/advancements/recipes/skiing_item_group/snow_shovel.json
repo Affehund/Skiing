@@ -6,22 +6,22 @@
     ]
   },
   "criteria": {
-    "has_item": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:stick"
-          }
-        ]
-      }
-    },
-    "has_item2": {
+    "has_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "item": "minecraft:bucket"
+          }
+        ]
+      }
+    },
+    "has_stick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stick"
           }
         ]
       }
@@ -35,8 +35,8 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_item2",
+      "has_bucket",
+      "has_stick",
       "has_the_recipe"
     ]
   ]
