@@ -165,6 +165,6 @@ public class SkiRackTileEntity extends LockableLootTileEntity {
 	
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(ModConstants.MOD_ID + ".container." + "_ski_rack");
+		return new TranslationTextComponent(ModConstants.MOD_ID + ".container.ski_rack");
 	}
 }

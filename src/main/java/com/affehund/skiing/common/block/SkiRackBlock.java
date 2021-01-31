@@ -2,13 +2,12 @@ package com.affehund.skiing.common.block;
 
 import java.util.stream.Stream;
 
-import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.common.tile.SkiRackTileEntity;
 import com.affehund.skiing.core.init.ModTileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -48,7 +47,7 @@ public class SkiRackBlock extends Block {
 	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
-	
+
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return ModTileEntities.SKI_RACK_TILE_ENTITY.get().create();
@@ -57,21 +56,14 @@ public class SkiRackBlock extends Block {
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult hit) {
-		if (!world.isRemote && hand == Hand.MAIN_HAND) {
-			final TileEntity tile = world.getTileEntity(pos);
+		if (!world.isRemote) {
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof SkiRackTileEntity) {
-				SkiRackTileEntity skiRackTile = (SkiRackTileEntity) tile;
-				ItemStack heldItem = player.getHeldItem(hand);
-				if (!Screen.hasShiftDown() && heldItem.getItem() instanceof SkisItem) {
-					if (skiRackTile.addItem(heldItem)) {
-						return ActionResultType.SUCCESS;
-					}
-				}
 				NetworkHooks.openGui((ServerPlayerEntity) player, (SkiRackTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
 			}
 		}
-		return ActionResultType.SUCCESS;
+		return ActionResultType.FAIL;
 	}
 
 	@Override
@@ -81,6 +73,15 @@ public class SkiRackBlock extends Block {
 			if (tileentity instanceof SkiRackTileEntity) {
 				InventoryHelper.dropInventoryItems(worldIn, pos, (SkiRackTileEntity) tileentity);
 				worldIn.updateComparatorOutputLevel(pos, this);
+			}
+		}
+	}
+
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (stack.hasDisplayName()) {
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity instanceof SkiRackTileEntity) {
+				((SkiRackTileEntity) tileentity).setCustomName(stack.getDisplayName());
 			}
 		}
 	}
