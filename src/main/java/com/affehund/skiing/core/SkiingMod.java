@@ -10,13 +10,13 @@ import org.apache.logging.log4j.Logger;
 import com.affehund.skiing.client.render.SkiRackTESR;
 import com.affehund.skiing.client.render.SkisRenderer;
 import com.affehund.skiing.client.screen.SkiRackScreen;
-import com.affehund.skiing.common.block.SkiRackBlock;
 import com.affehund.skiing.common.entity.SkisEntity;
 import com.affehund.skiing.common.item.PulloverItem;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.common.item.SnowShovel;
 import com.affehund.skiing.core.config.SkiingConfig;
 import com.affehund.skiing.core.data.gen.ModDataGeneration;
+import com.affehund.skiing.core.event.SnowWorldTickEvent;
 import com.affehund.skiing.core.init.ModBiomes;
 import com.affehund.skiing.core.init.ModBlocks;
 import com.affehund.skiing.core.init.ModContainers;
@@ -48,6 +48,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.MovementInput;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -94,10 +95,12 @@ public class SkiingMod {
 		modEventBus.addListener(this::gatherData);
 		MinecraftForge.EVENT_BUS.register(this);
 
+		MinecraftForge.EVENT_BUS.register(new SnowWorldTickEvent());
+
 		ModBlocks.BLOCKS.register(modEventBus);
 		ModItems.ITEMS.register(modEventBus);
-		ModContainers.CONTAINERS.register(modEventBus);
 		ModTileEntities.TILE_ENTITIES.register(modEventBus);
+		ModContainers.CONTAINERS.register(modEventBus);
 		ModEntities.ENTITIES.register(modEventBus);
 		ModPaintings.PAINTINGS.register(modEventBus);
 		ModVillagers.POINTS_OF_INTEREST.register(modEventBus);
@@ -106,7 +109,7 @@ public class SkiingMod {
 		ModBiomes.registerBiomes();
 
 		ModLoadingContext.get().registerConfig(Type.COMMON, SkiingConfig.COMMON_CONFIG_SPEC, COMMON_CONFIG_NAME);
-		ModLoadingContext.get().registerConfig(Type.CLIENT, SkiingConfig.CLIENT_CONFIG_SPEC, CLIENT_CONFIG_NAME);
+//		ModLoadingContext.get().registerConfig(Type.CLIENT, SkiingConfig.CLIENT_CONFIG_SPEC, CLIENT_CONFIG_NAME);
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
@@ -119,8 +122,8 @@ public class SkiingMod {
 	private void clientSetup(final FMLClientSetupEvent event) {
 		LOGGER.info("Client setup!");
 		RenderingRegistry.registerEntityRenderingHandler(ModEntities.SKI_ENTITY.get(), SkisRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntities.SKI_RACK_TILE_ENTITY.get(), SkiRackTESR::new);
 		ScreenManager.registerFactory(ModContainers.SKI_RACK_CONTAINER.get(), SkiRackScreen::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.SKI_RACK_TILE_ENTITY.get(), SkiRackTESR::new);
 	}
 
 	private void gatherData(final GatherDataEvent event) {
@@ -169,6 +172,7 @@ public class SkiingMod {
 					new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(ModItems.CHOCOLATE_CUP.get()), 20, 10));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
+			journeyman.add(new BasicTrade(getRandomIntInRange(4, 7), new ItemStack(ModBlocks.SKI_RACK.get()), 20, 10));
 
 			expert.add(new BasicTrade(new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2),
 					20, 10, 1f));
@@ -179,6 +183,25 @@ public class SkiingMod {
 			master.add(new BasicTrade(getRandomIntInRange(3, 5), new ItemStack(Items.SNOW_BLOCK, 8), 20, 10));
 			master.add(new BasicTrade(new ItemStack(Items.SNOW_BLOCK, 8), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 		}
+	}
+	
+	private static int getRandomIntInRange(int minimum, int maximum) {
+		int number = minimum + (new Random().nextInt((maximum - minimum) + 1));
+		return number;
+	}
+
+	private static ItemStack randomPulloverStack() {
+		ItemStack pulloverStack = new ItemStack(ModItems.PULLOVER.get());
+		((PulloverItem) pulloverStack.getItem()).setColor(pulloverStack,
+				DyeColor.values()[new Random().nextInt(DyeColor.values().length)].getFireworkColor());
+		return pulloverStack;
+	}
+
+	private static ItemStack randomSkisItemStack() {
+		ItemStack skisStack = new ItemStack(ModItems.SKIS_ITEM.get());
+		SkisEntity.SkisType type = SkisEntity.SkisType.getRandom();
+		((SkisItem) skisStack.getItem()).setSkisType(skisStack, type.name());
+		return skisStack;
 	}
 
 	@SuppressWarnings("resource")
@@ -196,10 +219,10 @@ public class SkiingMod {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onBlockHighlight(DrawHighlightEvent.HighlightBlock event) {
-		@SuppressWarnings("resource")
 		PlayerEntity player = Minecraft.getInstance().player;
 		if (player == null) {
 			return;
@@ -209,7 +232,6 @@ public class SkiingMod {
 		if (!tool.isEmpty()) {
 			if (tool.getItem() instanceof SnowShovel) {
 				int radius = SnowShovel.getRadius();
-				@SuppressWarnings("resource")
 				ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
 				Iterable<BlockPos> extraBlocks = SnowShovelUtils.getBlocksToBreak(world, player, radius);
 
@@ -248,8 +270,7 @@ public class SkiingMod {
 	public static void onRegisterItems(RegistryEvent.Register<Item> event) {
 		final IForgeRegistry<Item> registry = event.getRegistry();
 
-		ModBlocks.BLOCKS.getEntries().stream()
-				.filter(block -> !(block.get() instanceof FlowingFluidBlock) && !(block.get() instanceof SkiRackBlock))
+		ModBlocks.BLOCKS.getEntries().stream().filter(block -> !(block.get() instanceof FlowingFluidBlock))
 				.map(RegistryObject::get).forEach(block -> {
 					final Item.Properties properties = new Item.Properties().group(ModItemGroup.MOD_ITEM_GROUP);
 					final BlockItem blockItem = new BlockItem(block, properties);
@@ -259,22 +280,7 @@ public class SkiingMod {
 		LOGGER.debug("Registered block items!");
 	}
 
-	private static int getRandomIntInRange(int minimum, int maximum) {
-		int number = minimum + (new Random().nextInt((maximum - minimum) + 1));
-		return number;
-	}
-
-	private static ItemStack randomPulloverStack() {
-		ItemStack pulloverStack = new ItemStack(ModItems.PULLOVER.get());
-		((PulloverItem) pulloverStack.getItem()).setColor(pulloverStack,
-				DyeColor.values()[new Random().nextInt(DyeColor.values().length)].getFireworkColor());
-		return pulloverStack;
-	}
-
-	private static ItemStack randomSkisItemStack() {
-		ItemStack skisStack = new ItemStack(ModItems.SKIS_ITEM.get());
-		SkisEntity.SkisType type = SkisEntity.SkisType.getRandom();
-		((SkisItem) skisStack.getItem()).setSkisType(skisStack, type.name());
-		return skisStack;
+	public static ResourceLocation modResourceLocation(String path) {
+		return new ResourceLocation(ModConstants.MOD_ID, path);
 	}
 }

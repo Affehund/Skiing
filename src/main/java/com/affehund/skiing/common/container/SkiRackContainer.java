@@ -2,11 +2,11 @@ package com.affehund.skiing.common.container;
 
 import java.util.Objects;
 
-import com.affehund.skiing.common.container.slot.SkiStickSlot;
-import com.affehund.skiing.common.container.slot.SkisItemSlot;
+import com.affehund.skiing.common.container.slot.IsItemValidSlot;
 import com.affehund.skiing.common.tile.SkiRackTileEntity;
 import com.affehund.skiing.core.init.ModBlocks;
 import com.affehund.skiing.core.init.ModContainers;
+import com.affehund.skiing.core.init.ModItems;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,11 +31,11 @@ public class SkiRackContainer extends Container {
 		// container slots
 		int index = 0;
 		for (int j = 0; j < 2; ++j) {
-			this.addSlot(new SkisItemSlot(tileEntityIn, index++, 62 + j * 36, 28));
+			this.addSlot(new IsItemValidSlot(tileEntityIn, index++, 62 + j * 36, 28, ModItems.SKIS_ITEM.get()));
 		}
-		
+
 		for (int j = 0; j < 2; ++j) {
-			this.addSlot(new SkiStickSlot(tileEntityIn, index++, 62 + j * 36, 28 + 18));
+			this.addSlot(new IsItemValidSlot(tileEntityIn, index++, 62 + j * 36, 28 + 18, ModItems.SKI_STICK_ITEM.get()));
 		}
 
 		// hotbar slots

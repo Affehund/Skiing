@@ -2,8 +2,8 @@ package com.affehund.skiing.common.entity;
 
 import javax.annotation.Nonnull;
 
-import com.affehund.skiing.common.block.SkiRackBlock.SkiRackType;
 import com.affehund.skiing.common.item.SkisItem;
+import com.affehund.skiing.core.config.SkiingConfig;
 import com.affehund.skiing.core.data.gen.ModTags;
 import com.affehund.skiing.core.init.ModEntities;
 import com.affehund.skiing.core.init.ModItems;
@@ -45,19 +45,20 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class SkisEntity extends Entity {
 
 	// data
-	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(SkisEntity.class,
-			DataSerializers.VARINT);
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(SkisEntity.class,
 			DataSerializers.FLOAT);
-	private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.createKey(SkisEntity.class,
-			DataSerializers.VARINT);
 	private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(SkisEntity.class,
 			DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.createKey(SkisEntity.class,
+			DataSerializers.VARINT);
 	private static final DataParameter<Integer> SKIS_TYPE = EntityDataManager.createKey(SkisEntity.class,
+			DataSerializers.VARINT);
+	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(SkisEntity.class,
 			DataSerializers.VARINT);
 
 	// private values
 	private float deltaRotation;
+	private boolean flyDown;
 	private int lerpSteps;
 	private double lerpX;
 	private double lerpY;
@@ -69,7 +70,6 @@ public class SkisEntity extends Entity {
 	private boolean forwardInputDown;
 	private boolean backInputDown;
 	private boolean boostDown;
-	private boolean flyDown;
 	private SkisEntity.Status status;
 
 	public SkisEntity(EntityType<SkisEntity> entityType, World world) {
@@ -89,11 +89,11 @@ public class SkisEntity extends Entity {
 
 	@Override
 	protected void registerData() {
-		this.dataManager.register(TIME_SINCE_HIT, 0);
 		this.dataManager.register(DAMAGE_TAKEN, 0.0F);
-		this.dataManager.register(FORWARD_DIRECTION, 1);
 		this.dataManager.register(FLYING, false);
+		this.dataManager.register(FORWARD_DIRECTION, 1);
 		this.dataManager.register(SKIS_TYPE, SkisEntity.SkisType.ACACIA.ordinal());
+		this.dataManager.register(TIME_SINCE_HIT, 0);
 	}
 
 	@Override
@@ -118,7 +118,6 @@ public class SkisEntity extends Entity {
 	public void updatePassenger(Entity passenger) {
 		if (this.isPassenger(passenger) || passenger instanceof PlayerEntity) {
 			passenger.setPose(Pose.STANDING);
-
 			float f = -0.25F;
 			@SuppressWarnings("deprecation")
 			float f1 = (float) ((this.removed ? (double) 0.01F : this.getMountedYOffset()) + passenger.getYOffset());
@@ -252,24 +251,30 @@ public class SkisEntity extends Entity {
 	}
 
 	private void updateMotion() {
-		float momentum = 0.25F;
+		double momentum = 0.25D;
 		double falling = this.hasNoGravity() ? 0 : -0.02;
 
 		switch (this.status) {
-		case IN_WATER:
-			momentum = 0.2f;
-			break;
-		case ON_LAND:
-			momentum = 0.4f;
-			break;
-		case ON_SNOW:
-			momentum = isHoldingSkiSticks(this.getControllingPassenger()) ? 0.92F : 0.85F;
-			break;
 		case IN_AIR:
-			momentum = this.dataManager.get(FLYING) ? 0.9F : 0.85F;
+			momentum = this.dataManager.get(FLYING) ? SkiingConfig.COMMON_CONFIG.IN_AIR_FLYING_MOMENTUM.get()
+					: SkiingConfig.COMMON_CONFIG.IN_AIR_MOMENTUM.get();
+			break;
+		case IN_WATER:
+			momentum = SkiingConfig.COMMON_CONFIG.IN_WATER_MOMENTUM.get();
+			break;
+
+		case ON_LAND:
+			if (!SkiingConfig.COMMON_CONFIG.CROSS_SKIING.get()) {
+				momentum = SkiingConfig.COMMON_CONFIG.ON_LAND_MOMENTUM.get();
+				break;
+			}
+		case ON_SNOW:
+			momentum = isHoldingSkiSticks(this.getControllingPassenger())
+					? SkiingConfig.COMMON_CONFIG.ON_SNOW_WITH_STICKS_MOMENTUM.get()
+					: SkiingConfig.COMMON_CONFIG.ON_SNOW_MOMENTUM.get();
 			break;
 		default:
-			momentum = 0.4f;
+			momentum = SkiingConfig.COMMON_CONFIG.DEFAULT_MOMENTUM.get();
 			break;
 		}
 
@@ -436,7 +441,7 @@ public class SkisEntity extends Entity {
 		public Item getItem() {
 			return this.item;
 		}
-		
+
 		public String getName() {
 			return this.name;
 		}
@@ -456,7 +461,7 @@ public class SkisEntity extends Entity {
 		public static SkisType getRandom() {
 			return values()[(int) (Math.random() * values().length)];
 		}
-		
+
 		public static SkisType getByName(String name) {
 			return SkisType.valueOf(name.toUpperCase());
 		}
@@ -559,6 +564,6 @@ public class SkisEntity extends Entity {
 	}
 
 	private static enum Status {
-		IN_WATER, ON_SNOW, ON_LAND, IN_AIR;
+		IN_AIR, IN_WATER, ON_LAND, ON_SNOW;
 	}
 }

@@ -2,7 +2,7 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "ski_rack",
+      "name": "skiing:ski_rack",
       "rolls": 1,
       "entries": [
         {

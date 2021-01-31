@@ -58,7 +58,6 @@ public class ModVillagers {
 	}
 	
 	private static void addToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
-		System.out.println("added villager pool: " + toAdd + " to " + pool);
 		JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
 		List<JigsawPiece> shuffled = old.getShuffledPieces(new Random());
 		List<Pair<JigsawPiece, Integer>> newPieces = new ArrayList<>();

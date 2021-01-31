@@ -1,123 +1,18 @@
 {
 	"variants": {
-		"facing=north,type=acacia": {
-			"model": "skiing:block/ski_rack_acacia"
+		"facing=north,": {
+			"model": "skiing:block/ski_rack"
 		},
-		"facing=south,type=acacia": {
-			"model": "skiing:block/ski_rack_acacia",
+		"facing=south": {
+			"model": "skiing:block/ski_rack",
 			"y": 180
 		},
-		"facing=west,type=acacia": {
-			"model": "skiing:block/ski_rack_acacia",
+		"facing=west": {
+			"model": "skiing:block/ski_rack",
 			"y": 270
 		},
-		"facing=east,type=acacia": {
-			"model": "skiing:block/ski_rack_acacia",
-			"y": 90
-		},
-		"facing=north,type=birch": {
-			"model": "skiing:block/ski_rack_birch"
-		},
-		"facing=south,type=birch": {
-			"model": "skiing:block/ski_rack_birch",
-			"y": 180
-		},
-		"facing=west,type=birch": {
-			"model": "skiing:block/ski_rack_birch",
-			"y": 270
-		},
-		"facing=east,type=birch": {
-			"model": "skiing:block/ski_rack_birch",
-			"y": 90
-		},
-		"facing=north,type=crimson": {
-			"model": "skiing:block/ski_rack_crimson"
-		},
-		"facing=south,type=crimson": {
-			"model": "skiing:block/ski_rack_crimson",
-			"y": 180
-		},
-		"facing=west,type=crimson": {
-			"model": "skiing:block/ski_rack_crimson",
-			"y": 270
-		},
-		"facing=east,type=crimson": {
-			"model": "skiing:block/ski_rack_crimson",
-			"y": 90
-		},
-		"facing=north,type=dark_oak": {
-			"model": "skiing:block/ski_rack_dark_oak"
-		},
-		"facing=south,type=dark_oak": {
-			"model": "skiing:block/ski_rack_dark_oak",
-			"y": 180
-		},
-		"facing=west,type=dark_oak": {
-			"model": "skiing:block/ski_rack_dark_oak",
-			"y": 270
-		},
-		"facing=east,type=dark_oak": {
-			"model": "skiing:block/ski_rack_dark_oak",
-			"y": 90
-		},
-		"facing=north,type=jungle": {
-			"model": "skiing:block/ski_rack_jungle"
-		},
-		"facing=south,type=jungle": {
-			"model": "skiing:block/ski_rack_jungle",
-			"y": 180
-		},
-		"facing=west,type=jungle": {
-			"model": "skiing:block/ski_rack_jungle",
-			"y": 270
-		},
-		"facing=east,type=jungle": {
-			"model": "skiing:block/ski_rack_jungle",
-			"y": 90
-		},
-		"facing=north,type=oak": {
-			"model": "skiing:block/ski_rack_oak"
-		},
-		"facing=south,type=oak": {
-			"model": "skiing:block/ski_rack_oak",
-			"y": 180
-		},
-		"facing=west,type=oak": {
-			"model": "skiing:block/ski_rack_oak",
-			"y": 270
-		},
-		"facing=east,type=oak": {
-			"model": "skiing:block/ski_rack_oak",
-			"y": 90
-		},
-		"facing=north,type=spruce": {
-			"model": "skiing:block/ski_rack_spruce"
-		},
-		"facing=south,type=spruce": {
-			"model": "skiing:block/ski_rack_spruce",
-			"y": 180
-		},
-		"facing=west,type=spruce": {
-			"model": "skiing:block/ski_rack_spruce",
-			"y": 270
-		},
-		"facing=east,type=spruce": {
-			"model": "skiing:block/ski_rack_spruce",
-			"y": 90
-		},
-		"facing=north,type=warped": {
-			"model": "skiing:block/ski_rack_warped"
-		},
-		"facing=south,type=warped": {
-			"model": "skiing:block/ski_rack_warped", 
-			"y": 180
-		},
-		"facing=west,type=warped": {
-			"model": "skiing:block/ski_rack_warped",
-			"y": 270
-		},
-		"facing=east,type=warped": {
-			"model": "skiing:block/ski_rack_warped",
+		"facing=east": {
+			"model": "skiing:block/ski_rack",
 			"y": 90
 		}
 	}

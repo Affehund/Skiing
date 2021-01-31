@@ -2,29 +2,27 @@ package com.affehund.skiing.common.block;
 
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.common.tile.SkiRackTileEntity;
 import com.affehund.skiing.core.init.ModTileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -39,21 +37,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class SkiRackBlock extends Block {
-
 	public static final DirectionProperty DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
-	public static final EnumProperty<SkiRackType> TYPE = EnumProperty.create("type", SkiRackType.class);
 
 	public SkiRackBlock(Properties properties) {
 		super(properties);
-		this.setDefaultState(this.getStateContainer().getBaseState().with(DIRECTION, Direction.NORTH).with(TYPE,
-				SkiRackType.ACACIA));
+		this.setDefaultState(this.getStateContainer().getBaseState().with(DIRECTION, Direction.NORTH));
 	}
 
 	@Override
 	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
-
+	
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return ModTileEntities.SKI_RACK_TILE_ENTITY.get().create();
@@ -73,10 +68,31 @@ public class SkiRackBlock extends Block {
 					}
 				}
 				NetworkHooks.openGui((ServerPlayerEntity) player, (SkiRackTileEntity) tile, pos);
-				return ActionResultType.CONSUME;
+				return ActionResultType.SUCCESS;
 			}
 		}
-		return ActionResultType.FAIL;
+		return ActionResultType.SUCCESS;
+	}
+
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (state.getBlock() != newState.getBlock()) {
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity instanceof SkiRackTileEntity) {
+				InventoryHelper.dropInventoryItems(worldIn, pos, (SkiRackTileEntity) tileentity);
+				worldIn.updateComparatorOutputLevel(pos, this);
+			}
+		}
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
+		return Container.calcRedstoneFromInventory((IInventory) worldIn.getTileEntity(pos));
 	}
 
 	private static VoxelShape getNorthSouthShape() {
@@ -124,58 +140,6 @@ public class SkiRackBlock extends Block {
 
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(DIRECTION, TYPE);
-	}
-
-	@Nonnull
-	public static SkiRackType getSkiRackType(BlockState state) {
-		SkiRackType[] types = SkiRackType.values();
-		int type = state.get(TYPE).ordinal();
-		if (type < 0 || type >= types.length) {
-			return SkiRackType.ACACIA;
-		} else {
-			return types[type];
-		}
-	}
-
-	public static enum SkiRackType implements IStringSerializable {
-		ACACIA("acacia", Blocks.ACACIA_PLANKS, Blocks.ACACIA_SLAB),
-		BIRCH("birch", Blocks.BIRCH_PLANKS, Blocks.BIRCH_SLAB),
-		CRIMSON("crimson", Blocks.CRIMSON_PLANKS, Blocks.CRIMSON_SLAB),
-		DARK_OAK("dark_oak", Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_SLAB),
-		JUNGLE("jungle", Blocks.JUNGLE_PLANKS, Blocks.JUNGLE_SLAB), OAK("oak", Blocks.OAK_PLANKS, Blocks.OAK_SLAB),
-		SPRUCE("spruce", Blocks.SPRUCE_PLANKS, Blocks.SPRUCE_SLAB),
-		WARPED("warped", Blocks.WARPED_PLANKS, Blocks.WARPED_SLAB);
-
-		private final String name;
-		private final Block plank;
-		private final Block slab;
-
-		SkiRackType(String name, Block plank, Block slab) {
-			this.name = name;
-			this.plank = plank;
-			this.slab = slab;
-		}
-
-		public Block getPlank() {
-			return this.plank;
-		}
-
-		public Block getSlab() {
-			return this.slab;
-		}
-
-		public String getName() {
-			return this.name;
-		}
-
-		@Override
-		public String getString() {
-			return this.name;
-		}
-
-		public static SkiRackType getByName(String name) {
-			return SkiRackType.valueOf(name.toUpperCase());
-		}
+		builder.add(DIRECTION);
 	}
 }

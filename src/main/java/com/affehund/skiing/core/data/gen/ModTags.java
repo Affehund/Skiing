@@ -30,6 +30,7 @@ public class ModTags {
     
     public static class Items {
     	public static final ITag.INamedTag<Item> PLANKS = forgeTag("planks");
+    	public static final ITag.INamedTag<Item> WOODEN_SLABS = forgeTag("wooden_slabs");
     	public static final ITag.INamedTag<Item> WOOL = forgeTag("wool");
     	
         private static ITag.INamedTag<Item> forgeTag(String name) {

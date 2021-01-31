@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 public class SkiRackScreen extends ContainerScreen<SkiRackContainer> {
-
 	public SkiRackScreen(SkiRackContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 		this.guiLeft = 0;
@@ -31,19 +30,21 @@ public class SkiRackScreen extends ContainerScreen<SkiRackContainer> {
 	}
 
 	@Override
-	 protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        String s = this.title.getString();
-        this.font.drawString(matrixStack, s, (float)(this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
-        this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
-    	this.titleX = (this.xSize - this.font.getStringPropertyWidth(this.title)) / 2;
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+		String s = this.title.getString();
+		this.font.drawString(matrixStack, s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
+		this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F,
+				(float) (this.ySize - 96 + 2), 4210752);
+		this.titleX = (this.xSize - this.font.getStringPropertyWidth(this.title)) / 2;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
 		int relX = (width - xSize) / 2;
-        int relY = (height - ySize) / 2;
+		int relY = (height - ySize) / 2;
 		this.blit(matrixStack, relX, relY, 0, 0, this.xSize, this.ySize);
 	}
 }

@@ -35,7 +35,7 @@ public class SnowShovel extends ToolItem {
 	public boolean canHarvestBlock(BlockState blockIn) {
 		return blockIn.isIn(Blocks.SNOW) || blockIn.isIn(Blocks.SNOW_BLOCK);
 	}
-	
+
 	private static int radius = 1;
 
 	@Override
@@ -52,9 +52,10 @@ public class SnowShovel extends ToolItem {
 	public static int getRadius() {
 		return radius;
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "snow_shovel", TextFormatting.GRAY);
+		tooltip.add(
+				TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "snow_shovel").mergeStyle(TextFormatting.GRAY));
 	}
 }

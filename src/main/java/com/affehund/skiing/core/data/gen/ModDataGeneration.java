@@ -11,10 +11,8 @@ import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.affehund.skiing.common.block.SkiRackBlock;
 import com.affehund.skiing.common.entity.SkisEntity;
 import com.affehund.skiing.common.item.PulloverItem;
-import com.affehund.skiing.common.item.SkiRackItem;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.core.ModConstants;
 import com.affehund.skiing.core.SkiingMod;
@@ -93,12 +91,12 @@ public class ModDataGeneration {
 				add(ModItems.CHOCOLATE_CUP.get(), "Kakao Tasse");
 				add(ModItems.SNOW_SHOVEL.get(), "Schnee Schaufel");
 				add(ModItems.PULLOVER.get(), "Pullover");
-				add(ModBlocks.SKI_RACK.get(), "Ski-Ständer");
-				add("container." + ModConstants.MOD_ID + ModBlocks.SKI_RACK.get(), "Ski-Ständer");
-				add("tile." + ModConstants.MOD_ID + ModConstants.RegistryStrings.SKI_RACK, "Ski-Ständer");
+				add(ModBlocks.SKI_RACK.get(), "Skiständer");
+
 				addToolTip(modID, "snow_shovel",
 						"Mit diesem Gegenstand kannst du eine 3x3-Fläche aus Schnee auf einmal abbauen.");
 				addToolTip(modID, "type", "Typ");
+
 				addVillager(modID, ModVillagers.SKIS_MERCHANT.get(), "Ski Händler");
 				break;
 			case "en_us":
@@ -111,6 +109,7 @@ public class ModDataGeneration {
 				add(ModItems.SNOW_SHOVEL.get(), "Snow Shovel");
 				add(ModItems.PULLOVER.get(), "Pullover");
 				add(ModBlocks.SKI_RACK.get(), "Ski Rack");
+
 				addToolTip(modID, "snow_shovel", "With this item you can break a 3x3 area of snow at once.");
 				addToolTip(modID, "type", "Type");
 				addVillager(modID, ModVillagers.SKIS_MERCHANT.get(), "Skis Merchant");
@@ -153,9 +152,6 @@ public class ModDataGeneration {
 		@Override
 		protected void registerModels() {
 			this.blacklist.add(ModItems.SKI_STICK_ITEM.get());
-			this.blacklist.add(ModItems.SKIS_RACK.get());
-			
-			
 			for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
 				Item item = ForgeRegistries.ITEMS.getValue(id);
 				if (item != null && ModConstants.MOD_ID.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
@@ -169,7 +165,7 @@ public class ModDataGeneration {
 		}
 
 		protected void defaultItem(ResourceLocation id, Item item) {
-			if (item instanceof SkisItem || item instanceof SkiRackItem) {
+			if (item instanceof SkisItem) {
 				this.getBuilder(id.getPath())
 						.parent(this.getExistingFile(new ResourceLocation(id.getNamespace(), "item/ister_template")));
 			} else if (item instanceof PulloverItem) {
@@ -200,9 +196,11 @@ public class ModDataGeneration {
 				addSkisRecipe(consumer, type);
 			}
 
-			for (SkiRackBlock.SkiRackType type : SkiRackBlock.SkiRackType.values()) {
-				addRackRecipe(consumer, type);
-			}
+			ShapedRecipeBuilder.shapedRecipe(ModBlocks.SKI_RACK.get()).patternLine("p p").patternLine("pcp")
+					.patternLine("sss").key('p', ModTags.Items.PLANKS)
+					.addCriterion("has_plank", hasItem(ModTags.Items.PLANKS)).key('c', Tags.Items.CHESTS_WOODEN)
+					.addCriterion("has_chest", hasItem(Tags.Items.CHESTS_WOODEN)).key('s', ModTags.Items.WOODEN_SLABS)
+					.addCriterion("has_slab", hasItem(ModTags.Items.WOODEN_SLABS)).build(consumer);
 
 			addPulloverRecipe(consumer, Items.BLACK_WOOL, ModItems.PULLOVER.get(), DyeColor.BLACK);
 			addPulloverRecipe(consumer, Items.BLUE_WOOL, ModItems.PULLOVER.get(), DyeColor.BLUE);
@@ -237,22 +235,8 @@ public class ModDataGeneration {
 
 		}
 
-		protected void addRackRecipe(Consumer<IFinishedRecipe> consumer, SkiRackBlock.SkiRackType type) {
-			IItemProvider plank = type.getPlank().asItem();
-			IItemProvider slab = type.getSlab().asItem();
-			IItemProvider result = ModBlocks.SKI_RACK.get().asItem();
-			String name = type.getName();
-			CompoundNBT customNbt = new CompoundNBT();
-			customNbt.putString("Type", name);
-			ShapedRecipeBuilder.shapedRecipe(result).patternLine("p p").patternLine("pcp").patternLine("sss")
-					.key('p', plank).addCriterion("has_plank", hasItem(plank)).key('c', Tags.Items.CHESTS_WOODEN)
-					.addCriterion("has_chest", hasItem(Tags.Items.CHESTS_WOODEN)).key('s', slab)
-					.addCriterion("has_slab", hasItem(slab))
-					.build(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.CRAFTING_SHAPED, customNbt),
-							new ResourceLocation(ModConstants.MOD_ID, result.toString() + "_from_" + type.getName()));
-		}
-
 		protected void addSkisRecipe(Consumer<IFinishedRecipe> consumer, SkisEntity.SkisType type) {
+			String folder = "skis/";
 			IItemProvider plank = type.getPlank().asItem();
 			IItemProvider result = type.getItem();
 			String name = type.getName();
@@ -261,11 +245,12 @@ public class ModDataGeneration {
 			ShapedRecipeBuilder.shapedRecipe(result).patternLine("p  ").patternLine(" p ").patternLine("  p")
 					.key('p', plank).addCriterion("has_plank", hasItem(plank))
 					.build(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.CRAFTING_SHAPED, customNbt),
-							new ResourceLocation(ModConstants.MOD_ID, result.toString() + "_from_" + type.toString()));
+							SkiingMod.modResourceLocation(folder + result.toString() + "_from_" + type.toString()));
 		}
 
 		protected void addPulloverRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider input, IItemProvider result,
 				DyeColor color) {
+			String folder = "pullovers/";
 			CompoundNBT subNbt = new CompoundNBT();
 			subNbt.putInt("color", color.getFireworkColor());
 			CompoundNBT customNbt = new CompoundNBT();
@@ -274,8 +259,8 @@ public class ModDataGeneration {
 					.key('w', input).key('g', Ingredient.fromItems(Items.LIME_DYE, Items.GREEN_DYE))
 					.addCriterion("has_item", hasItem(input))
 					.build(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.CRAFTING_SHAPED, customNbt),
-							new ResourceLocation(ModConstants.MOD_ID,
-									result.asItem().toString() + "_from_" + input.asItem().toString()));
+							SkiingMod.modResourceLocation(
+									folder + result.asItem().toString() + "_from_" + input.asItem().toString()));
 		}
 
 //		private static class CustomNBTIngredient extends NBTIngredient {
@@ -362,6 +347,7 @@ public class ModDataGeneration {
 
 		@Override
 		protected void registerTags() {
+
 			getOrCreateBuilder(ModTags.Items.WOOL).add(Items.BLACK_WOOL).add(Items.BLUE_WOOL).add(Items.BROWN_WOOL)
 					.add(Items.CYAN_WOOL).add(Items.GRAY_WOOL).add(Items.GREEN_WOOL).add(Items.LIGHT_BLUE_WOOL)
 					.add(Items.LIGHT_GRAY_WOOL).add(Items.LIME_WOOL).add(Items.MAGENTA_WOOL).add(Items.ORANGE_WOOL)
@@ -371,6 +357,10 @@ public class ModDataGeneration {
 			getOrCreateBuilder(ModTags.Items.PLANKS).add(Items.ACACIA_PLANKS).add(Items.BIRCH_PLANKS)
 					.add(Items.CRIMSON_PLANKS).add(Items.DARK_OAK_PLANKS).add(Items.JUNGLE_PLANKS).add(Items.OAK_PLANKS)
 					.add(Items.SPRUCE_PLANKS).add(Items.WARPED_PLANKS);
+
+			getOrCreateBuilder(ModTags.Items.WOODEN_SLABS).add(Items.ACACIA_SLAB).add(Items.BIRCH_SLAB)
+					.add(Items.CRIMSON_SLAB).add(Items.DARK_OAK_SLAB).add(Items.JUNGLE_SLAB).add(Items.OAK_SLAB)
+					.add(Items.SPRUCE_SLAB).add(Items.WARPED_SLAB);
 		}
 	}
 
@@ -382,7 +372,11 @@ public class ModDataGeneration {
 		}
 
 		protected void addTables() {
-			lootTables.put(ModBlocks.SKI_RACK.get(), createStandardTable("ski_rack", ModBlocks.SKI_RACK.get()));
+			createStandardBlockTable(ModBlocks.SKI_RACK.get());
+		}
+
+		protected void createStandardBlockTable(Block block) {
+			lootTables.put(block, createStandardTable(block.getRegistryName().toString(), block));
 		}
 
 		private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();

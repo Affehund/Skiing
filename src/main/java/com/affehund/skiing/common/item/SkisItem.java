@@ -23,6 +23,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -106,8 +107,10 @@ public class SkisItem extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		String type = getSkisType(stack).getName();
+		SkisType type = getSkisType(stack);
+		IFormattableTextComponent name = type.getPlank().getTranslatedName();
 		tooltip.add(new StringTextComponent(
-				TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "type").getString() + ": " + type).mergeStyle(TextFormatting.GRAY));
+				TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "type").getString() + ": "
+						+ name.getString()).mergeStyle(TextFormatting.GRAY));
 	}
 }

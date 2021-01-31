@@ -8,7 +8,7 @@
   "item.skiing.ski_stick": "Ski Stick",
   "item.skiing.skis_item": "Skis",
   "item.skiing.snow_shovel": "Snow Shovel",
-  "itemGroup.skiing_item_group": "Skiing",
+  "itemGroup.skiing": "Skiing",
   "skiing.tooltip.snow_shovel": "With this item you can break a 3x3 area of snow at once.",
   "skiing.tooltip.type": "Type"
 }

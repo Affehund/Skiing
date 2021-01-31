@@ -2,8 +2,8 @@
 	"credit": "Created by Affehund",
 	"parent": "block/block",
 	"textures": {
-		"0": "block/acacia_planks",
-		"particle": "block/acacia_planks"
+		"0": "block/oak_planks",
+		"particle": "block/oak_planks"
 	},
 	"elements": [
 		{

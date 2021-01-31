@@ -1,10 +1,5 @@
 package com.affehund.skiing.common.tile;
 
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
-import com.affehund.skiing.common.block.SkiRackBlock;
 import com.affehund.skiing.common.container.SkiRackContainer;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.core.ModConstants;
@@ -12,7 +7,6 @@ import com.affehund.skiing.core.init.ModItems;
 import com.affehund.skiing.core.init.ModTileEntities;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
@@ -21,26 +15,23 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.util.Constants;
 
 public class SkiRackTileEntity extends LockableLootTileEntity {
 	protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 
 	public SkiRackTileEntity(TileEntityType<?> tileEntityTypeIn) {
-
 		super(tileEntityTypeIn);
 	}
 
 	public SkiRackTileEntity() {
 		this(ModTileEntities.SKI_RACK_TILE_ENTITY.get());
 	}
+
 
 	@Override
 	public void read(BlockState blockState, CompoundNBT compound) {
@@ -54,11 +45,6 @@ public class SkiRackTileEntity extends LockableLootTileEntity {
 		super.write(compound);
 		ItemStackHelper.saveAllItems(compound, this.items);
 		return compound;
-	}
-
-	public void setType(SkiRackBlock.SkiRackType type) {
-		this.world.setBlockState(pos, this.world.getBlockState(this.pos).with(SkiRackBlock.TYPE, type));
-		this.markDirty();
 	}
 
 	@Override
@@ -136,16 +122,6 @@ public class SkiRackTileEntity extends LockableLootTileEntity {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
-					(double) this.pos.getZ() + 0.5D) <= 64.0D;
-		}
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
 		if ((index == 0 || index == 1) && !(stack.getItem() instanceof SkisItem)) {
 			return false;
@@ -183,26 +159,12 @@ public class SkiRackTileEntity extends LockableLootTileEntity {
 	}
 
 	@Override
-	protected Container createMenu(int id, PlayerInventory player) {
-		return new SkiRackContainer(id, player, this);
+	protected Container createMenu(int id, PlayerInventory playerInventory) {
+		return new SkiRackContainer(id, playerInventory, this);
 	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(
-				"block." + ModConstants.MOD_ID + "." + ModConstants.RegistryStrings.SKI_RACK);
-	}
-
+	
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(
-				"block." + ModConstants.MOD_ID + "." + ModConstants.RegistryStrings.SKI_RACK);
-	}
-
-	public static Optional<SkiRackTileEntity> get(@Nullable IBlockReader world, BlockPos pos) {
-		if (world == null)
-			return Optional.empty();
-		TileEntity te = world.getTileEntity(pos);
-		return te instanceof SkiRackTileEntity ? Optional.of((SkiRackTileEntity) te) : Optional.empty();
+		return new TranslationTextComponent(ModConstants.MOD_ID + ".container." + "_ski_rack");
 	}
 }

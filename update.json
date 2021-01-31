@@ -1,11 +1,16 @@
 {
-  "homepage": "https://www.curseforge.com/minecraft/mc-mods/skiing",
-  "1.16.4": {
-    "skiing-1.16.4-1.0.0": "changelog",
-    "skiing-1.16.4-1.1.0": "changelog"
+  "homepage" : "https://www.curseforge.com/minecraft/mc-mods/skiing",
+  "1.16.5" : {
+    "skiing-1.16.5-1.1.0" : "Additions:\n- ski rack: place down your skis and ski sticks in the new ski rack\n- a new config to change some values for skis and snow layering\n - snow layering mechanic: snow layers will be placed when it snows / removed when it stops snowing\n\nChanges:\n- new skis item pose\n - lowercased the of the skis item nbt\n-small tweaks and fixes"
   },
-  "promos": {
-    "1.16.4-latest": "skiing-1.16.4-1.1.0",
-    "1.16.4-recommended": "skiing-1.16.4-1.1.0"
+  "1.16.4" : {
+    "skiing-1.16.4-1.0.0" : "Initial release",
+    "skiing-1.16.5-1.1.0" : "Additions:\n- ski rack: place down your skis and ski sticks in the new ski rack\n- a new config to change some values the skis and snow layering\n - snow layering mechanic: snow layers will be placed when it snows / removed when it stops snowing\n\nChanges:\n- new skis item pose\n- lowercased the of the skis item nbt\n-small tweaks and fixes"
+  },
+  "promos" : {
+    "1.16.5-latest" : "skiing-1.16.5-1.1.0",
+    "1.16.5-recommended" : "skiing-1.16.5-1.1.0",
+    "1.16.4-latest" : "skiing-1.16.5-1.1.0",
+    "1.16.4-recommended" : "skiing-1.16.5-1.1.0"
   }
 }
