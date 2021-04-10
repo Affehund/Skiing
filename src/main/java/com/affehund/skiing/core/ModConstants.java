@@ -22,15 +22,16 @@ public class ModConstants {
 		public static final String SKIS_ITEM = "skis_item";
 		public static final String SKI_STICK_ITEM = "ski_stick";
 		public static final String SKIS_ENTITY = "skis_entity";
+		public static final String SNOWBOARD_ITEM = "snowboard_item";
+		public static final String SNOWBOARD_ENTITY = "snowboard_entity";
+
 		public static final String MOD_ITEM_GROUP = "skiing_item_group";
 
 		public static final String PULLOVER = "pullover";
-		
+
 		public static final String ALPS_BIOME = "alps_biome";
-		
+
 		public static final String SKI_RACK = "ski_rack";
-		
-		public static final String SLALOM_GATE = "slalom_gate";
 	}
 
 	public static final String ARMOR_PATH = ModConstants.MOD_ID + ":textures/models/armor/";

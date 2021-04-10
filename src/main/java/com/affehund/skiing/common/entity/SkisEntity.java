@@ -124,8 +124,7 @@ public class SkisEntity extends Entity {
 
 			Vector3d vector3d = (new Vector3d(f, 0.0D, 0.0D))
 					.rotateYaw(-this.rotationYaw * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-			passenger.setPosition(this.getPosX() + vector3d.x, this.getPosY() + (double) f1,
-					this.getPosZ() + vector3d.z);
+			passenger.setPosition(this.getPosX() + vector3d.x, this.getPosY() + f1, this.getPosZ() + vector3d.z);
 			passenger.rotationYaw += this.deltaRotation;
 			passenger.setRotationYawHead(passenger.getRotationYawHead() + this.deltaRotation);
 			this.applyYawToEntity(passenger);
@@ -200,8 +199,8 @@ public class SkisEntity extends Entity {
 			if (this.forwardInputDown) {
 				f += this.boostDown && !this.dataManager.get(FLYING) && this.onGround ? 0.06f : 0.04f;
 				if (status == Status.ON_SNOW)
-					this.world.addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPosX() + (double) this.rand.nextFloat(),
-							this.getPosY() + 0.5D, this.getPosZ() + (double) this.rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+					this.world.addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPosX() + this.rand.nextFloat(),
+							this.getPosY() + 0.5D, this.getPosZ() + this.rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 			}
 
 			if (this.backInputDown) {
@@ -226,13 +225,12 @@ public class SkisEntity extends Entity {
 		}
 
 		if (this.lerpSteps > 0) {
-			double d0 = this.getPosX() + (this.lerpX - this.getPosX()) / (double) this.lerpSteps;
-			double d1 = this.getPosY() + (this.lerpY - this.getPosY()) / (double) this.lerpSteps;
-			double d2 = this.getPosZ() + (this.lerpZ - this.getPosZ()) / (double) this.lerpSteps;
-			double d3 = MathHelper.wrapDegrees(this.lerpYaw - (double) this.rotationYaw);
-			this.rotationYaw = (float) ((double) this.rotationYaw + d3 / (double) this.lerpSteps);
-			this.rotationPitch = (float) ((double) this.rotationPitch
-					+ (this.lerpPitch - (double) this.rotationPitch) / (double) this.lerpSteps);
+			double d0 = this.getPosX() + (this.lerpX - this.getPosX()) / this.lerpSteps;
+			double d1 = this.getPosY() + (this.lerpY - this.getPosY()) / this.lerpSteps;
+			double d2 = this.getPosZ() + (this.lerpZ - this.getPosZ()) / this.lerpSteps;
+			double d3 = MathHelper.wrapDegrees(this.lerpYaw - this.rotationYaw);
+			this.rotationYaw = (float) (this.rotationYaw + d3 / this.lerpSteps);
+			this.rotationPitch = (float) (this.rotationPitch + (this.lerpPitch - this.rotationPitch) / this.lerpSteps);
 			--this.lerpSteps;
 			this.setPosition(d0, d1, d2);
 			this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -361,6 +359,7 @@ public class SkisEntity extends Entity {
 		}
 	}
 
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void performHurtAnimation() {
 		this.setForwardDirection(-this.getForwardDirection());
@@ -446,6 +445,7 @@ public class SkisEntity extends Entity {
 			return this.name;
 		}
 
+		@Override
 		public String toString() {
 			return this.name;
 		}

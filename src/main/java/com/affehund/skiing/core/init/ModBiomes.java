@@ -14,11 +14,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBiomes {
-	
+
 	// deferred registry
 	public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES,
 			ModConstants.MOD_ID);
-	
+
 	static {
 		createBiome(ModConstants.RegistryStrings.ALPS_BIOME, BiomeMaker::makeVoidBiome);
 	}
@@ -27,8 +27,7 @@ public class ModBiomes {
 		return BIOMES.register(name, biome);
 	}
 
-
-	//register tje biome and add it to the biome manager
+	// register the biome and add it to the biome manager
 	public static RegistryKey<Biome> ALPS_BIOME_KEY = registryKey(ModConstants.RegistryStrings.ALPS_BIOME);
 
 	public static RegistryKey<Biome> registryKey(String name) {

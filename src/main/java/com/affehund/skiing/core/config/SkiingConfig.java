@@ -25,38 +25,43 @@ public class SkiingConfig {
 		public final DoubleValue ON_LAND_MOMENTUM;
 		public final DoubleValue ON_SNOW_MOMENTUM;
 		public final DoubleValue ON_SNOW_WITH_STICKS_MOMENTUM;
-		
-		public final BooleanValue ADD_SNOW_LAYERS; 
-		public final IntValue ADD_SNOW_LAYERS_CHANCE; 
-		public final BooleanValue REMOVE_SNOW_LAYERS; 
-		public final IntValue REMOVE_SNOW_LAYERS_CHANCE; 
-		
+
+		public final BooleanValue ADD_SNOW_LAYERS;
+		public final IntValue ADD_SNOW_LAYERS_CHANCE;
+		public final BooleanValue REMOVE_SNOW_LAYERS;
+		public final IntValue REMOVE_SNOW_LAYERS_CHANCE;
+
 		public SkiingCommonConfig(ForgeConfigSpec.Builder builder) {
 			builder.comment("Skiing Common Config").push("skis_entity");
 			CROSS_SKIING = builder.comment("This sets whether you are slowed down on non-snowy blocks.")
 					.define("cross_skiing", false);
 			DEFAULT_MOMENTUM = builder.comment("This sets the default momentum (not very interesting).")
 					.defineInRange("default_momentum", 0.4D, 0.0D, 1.0D);
-			IN_AIR_MOMENTUM = builder.comment("This sets the momentum in air.")
-					.defineInRange("in_air_momentum", 0.8D, 0.0D, 1.0D);
+			IN_AIR_MOMENTUM = builder.comment("This sets the momentum in air.").defineInRange("in_air_momentum", 0.8D,
+					0.0D, 1.0D);
 			IN_AIR_FLYING_MOMENTUM = builder.comment("This sets the momentum in air when flying.")
 					.defineInRange("in_air_momentum_flying", 0.9f, 0.0D, 1.0D);
-			IN_WATER_MOMENTUM = builder.comment("This sets the momentum in water.")
-					.defineInRange("in_water_momentum", 0.2f, 0.0D, 1.0D);
-			ON_LAND_MOMENTUM = builder.comment("This sets the momentum on land.")
-					.defineInRange("on_land_momentum", 0.4f, 0.0D, 1.0D);
-			ON_SNOW_MOMENTUM = builder.comment("This sets the momentum on snow.")
-					.defineInRange("on_snow_momentum", 0.85F, 0.0D, 1.0D);
-			ON_SNOW_WITH_STICKS_MOMENTUM = builder
-					.comment("This sets the momentum on snow when holding ski sticks.")
+			IN_WATER_MOMENTUM = builder.comment("This sets the momentum in water.").defineInRange("in_water_momentum",
+					0.2f, 0.0D, 1.0D);
+			ON_LAND_MOMENTUM = builder.comment("This sets the momentum on land.").defineInRange("on_land_momentum",
+					0.4f, 0.0D, 1.0D);
+			ON_SNOW_MOMENTUM = builder.comment("This sets the momentum on snow.").defineInRange("on_snow_momentum",
+					0.85F, 0.0D, 1.0D);
+			ON_SNOW_WITH_STICKS_MOMENTUM = builder.comment("This sets the momentum on snow when holding ski sticks.")
 					.defineInRange("on_snow_with_sticks_momentum", 0.92F, 0.0D, 1.0D);
 			builder.pop();
-			
+
 			builder.push("snow_layering");
-			ADD_SNOW_LAYERS = builder.comment("This sets whether snow layers are added when it snows.").define("add_snow_layers", true);
-			ADD_SNOW_LAYERS_CHANCE = builder.comment("This sets the chance how often snow layers are added. 100 means every 5 seconds a snow layer is added.").defineInRange("add_snow_layer_chance", 100, 1, Integer.MAX_VALUE);
-			REMOVE_SNOW_LAYERS = builder.comment("This sets whether snow layers are removed when it stops snowing.").define("remove_snow_layers", true);
-			REMOVE_SNOW_LAYERS_CHANCE = builder.comment("This sets the chance how often snow layers are removed. 100 means every 5 seconds a snow layer is removed.").defineInRange("remove_snow_layer_chance", 200, 1, Integer.MAX_VALUE);
+			ADD_SNOW_LAYERS = builder.comment("This sets whether snow layers are added when it snows.")
+					.define("add_snow_layers", true);
+			ADD_SNOW_LAYERS_CHANCE = builder.comment(
+					"This sets the chance how often snow layers are added. 100 means every 5 seconds a snow layer is added.")
+					.defineInRange("add_snow_layer_chance", 100, 1, Integer.MAX_VALUE);
+			REMOVE_SNOW_LAYERS = builder.comment("This sets whether snow layers are removed when it stops snowing.")
+					.define("remove_snow_layers", true);
+			REMOVE_SNOW_LAYERS_CHANCE = builder.comment(
+					"This sets the chance how often snow layers are removed. 100 means every 5 seconds a snow layer is removed.")
+					.defineInRange("remove_snow_layer_chance", 200, 1, Integer.MAX_VALUE);
 			builder.pop();
 		}
 	}
@@ -67,15 +72,6 @@ public class SkiingConfig {
 			builder.comment("Skiing Client Config").push("general");
 			builder.pop();
 		}
-	}
-
-	public static final ForgeConfigSpec CLIENT_CONFIG_SPEC;
-	public static final SkiingClientConfig CLIENT_CONFIG;
-	static {
-		final Pair<SkiingClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder()
-				.configure(SkiingClientConfig::new);
-		CLIENT_CONFIG_SPEC = specPair.getRight();
-		CLIENT_CONFIG = specPair.getLeft();
 	}
 
 	public static final ForgeConfigSpec COMMON_CONFIG_SPEC;

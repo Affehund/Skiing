@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p p",
+    "pcp",
+    "sss"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:oak_planks"
+    },
+    "c": {
+      "tag": "forge:chests/wooden"
+    },
+    "s": {
+      "item": "minecraft:oak_slab"
+    }
+  },
+  "result": {
+    "item": "skiing:oak_ski_rack"
+  }
+}

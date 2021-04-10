@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sps"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:crimson_planks"
+    },
+    "s": {
+      "item": "minecraft:crimson_slab"
+    }
+  },
+  "result": {
+    "item": "skiing:snowboard_item",
+    "nbt": "{Type:\"crimson\"}"
+  }
+}

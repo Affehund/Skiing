@@ -7,10 +7,26 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.affehund.skiing.client.render.SkiRackTESR;
 import com.affehund.skiing.client.render.SkisRenderer;
-import com.affehund.skiing.client.screen.SkiRackScreen;
+import com.affehund.skiing.client.render.SnowboardRenderer;
+import com.affehund.skiing.client.render.ski_rack.AcaciaSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.BirchSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.CrimsonSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.DarkOakSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.JungleSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.OakSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.SpruceSkiRackTESR;
+import com.affehund.skiing.client.render.ski_rack.WarpedSkiRackTESR;
+import com.affehund.skiing.client.screen.AcaciaSkiRackScreen;
+import com.affehund.skiing.client.screen.BirchSkiRackScreen;
+import com.affehund.skiing.client.screen.CrimsonSkiRackScreen;
+import com.affehund.skiing.client.screen.DarkOakSkiRackScreen;
+import com.affehund.skiing.client.screen.JungleSkiRackScreen;
+import com.affehund.skiing.client.screen.OakSkiRackScreen;
+import com.affehund.skiing.client.screen.SpruceSkiRackScreen;
+import com.affehund.skiing.client.screen.WarpedSkiRackScreen;
 import com.affehund.skiing.common.entity.SkisEntity;
+import com.affehund.skiing.common.entity.SnowboardEntity;
 import com.affehund.skiing.common.item.PulloverItem;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.common.item.SnowShovel;
@@ -86,7 +102,6 @@ public class SkiingMod {
 	final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 	public static final String COMMON_CONFIG_NAME = "skiing-common.toml";
-	public static final String CLIENT_CONFIG_NAME = "skiing-client.toml";
 
 	public SkiingMod() {
 		LOGGER.debug("Loading up " + ModConstants.NAME + "!");
@@ -109,7 +124,6 @@ public class SkiingMod {
 		ModBiomes.registerBiomes();
 
 		ModLoadingContext.get().registerConfig(Type.COMMON, SkiingConfig.COMMON_CONFIG_SPEC, COMMON_CONFIG_NAME);
-//		ModLoadingContext.get().registerConfig(Type.CLIENT, SkiingConfig.CLIENT_CONFIG_SPEC, CLIENT_CONFIG_NAME);
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
@@ -122,8 +136,30 @@ public class SkiingMod {
 	private void clientSetup(final FMLClientSetupEvent event) {
 		LOGGER.info("Client setup!");
 		RenderingRegistry.registerEntityRenderingHandler(ModEntities.SKI_ENTITY.get(), SkisRenderer::new);
-		ScreenManager.registerFactory(ModContainers.SKI_RACK_CONTAINER.get(), SkiRackScreen::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntities.SKI_RACK_TILE_ENTITY.get(), SkiRackTESR::new);
+		RenderingRegistry.registerEntityRenderingHandler(ModEntities.SNOWBOARD_ENTITY.get(), SnowboardRenderer::new);
+		ScreenManager.registerFactory(ModContainers.ACACIA_SKI_RACK_CONTAINER.get(), AcaciaSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.BIRCH_SKI_RACK_CONTAINER.get(), BirchSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.CRIMSON_SKI_RACK_CONTAINER.get(), CrimsonSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.DARK_OAK_SKI_RACK_CONTAINER.get(), DarkOakSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.JUNGLE_SKI_RACK_CONTAINER.get(), JungleSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.OAK_SKI_RACK_CONTAINER.get(), OakSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.SPRUCE_SKI_RACK_CONTAINER.get(), SpruceSkiRackScreen::new);
+		ScreenManager.registerFactory(ModContainers.WARPED_SKI_RACK_CONTAINER.get(), WarpedSkiRackScreen::new);
+
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.ACACIA_SKI_RACK_TILE_ENTITY.get(),
+				AcaciaSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.BIRCH_SKI_RACK_TILE_ENTITY.get(), BirchSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.CRIMSON_SKI_RACK_TILE_ENTITY.get(),
+				CrimsonSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.DARK_OAK_SKI_RACK_TILE_ENTITY.get(),
+				DarkOakSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.JUNGLE_SKI_RACK_TILE_ENTITY.get(),
+				JungleSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.OAK_SKI_RACK_TILE_ENTITY.get(), OakSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.SPRUCE_SKI_RACK_TILE_ENTITY.get(),
+				SpruceSkiRackTESR::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntities.WARPED_SKI_RACK_TILE_ENTITY.get(),
+				WarpedSkiRackTESR::new);
 	}
 
 	private void gatherData(final GatherDataEvent event) {
@@ -167,14 +203,17 @@ public class SkiingMod {
 			apprentice.add(new BasicTrade(getRandomIntInRange(1, 3), randomSkisItemStack(), 20, 10));
 			apprentice.add(
 					new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), 20, 10));
+			apprentice.add(
+					new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(ModItems.SNOWBOARD_ITEM.get(), 2), 20, 10));
 
 			journeyman.add(
 					new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(ModItems.CHOCOLATE_CUP.get()), 20, 10));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
-			journeyman.add(new BasicTrade(getRandomIntInRange(4, 7), new ItemStack(ModBlocks.SKI_RACK.get()), 20, 10));
 
 			expert.add(new BasicTrade(new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2),
+					20, 10, 1f));
+			expert.add(new BasicTrade(new ItemStack(ModItems.SNOWBOARD_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2),
 					20, 10, 1f));
 			expert.add(new BasicTrade(randomSkisItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
 			expert.add(new BasicTrade(randomSkisItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
@@ -184,7 +223,7 @@ public class SkiingMod {
 			master.add(new BasicTrade(new ItemStack(Items.SNOW_BLOCK, 8), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 		}
 	}
-	
+
 	private static int getRandomIntInRange(int minimum, int maximum) {
 		int number = minimum + (new Random().nextInt((maximum - minimum) + 1));
 		return number;
@@ -204,17 +243,22 @@ public class SkiingMod {
 		return skisStack;
 	}
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@OnlyIn(Dist.CLIENT)
 	public void controllSkis(InputUpdateEvent event) {
-		if (Minecraft.getInstance().player != null) {
-			Entity riddenEntity = Minecraft.getInstance().player.getRidingEntity();
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player != null) {
+			Entity riddenEntity = mc.player.getRidingEntity();
+			MovementInput movementInput = event.getMovementInput();
 			if (riddenEntity instanceof SkisEntity) {
-				MovementInput movementInput = event.getMovementInput();
 				((SkisEntity) riddenEntity).updateInputs(movementInput.leftKeyDown, movementInput.rightKeyDown,
 						movementInput.forwardKeyDown, movementInput.backKeyDown,
-						Minecraft.getInstance().gameSettings.keyBindSprint.isKeyDown(), movementInput.jump);
+						mc.gameSettings.keyBindSprint.isKeyDown(), movementInput.jump);
+			}
+			if (riddenEntity instanceof SnowboardEntity) {
+				((SnowboardEntity) riddenEntity).updateInputs(movementInput.leftKeyDown, movementInput.rightKeyDown,
+						movementInput.forwardKeyDown, movementInput.backKeyDown,
+						mc.gameSettings.keyBindSprint.isKeyDown(), movementInput.jump);
 			}
 		}
 	}
