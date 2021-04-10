@@ -236,17 +236,6 @@ public class SnowboardEntity extends Entity {
 		}
 	}
 
-	private boolean isHoldingSkiSticks(Entity ridingEntity) {
-		if (ridingEntity instanceof PlayerEntity) {
-			PlayerEntity playerEntity = (PlayerEntity) ridingEntity;
-			if ((playerEntity.getHeldItemOffhand().getItem() == ModItems.SKI_STICK_ITEM.get()
-					&& playerEntity.getHeldItemMainhand().getItem() == ModItems.SKI_STICK_ITEM.get())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private void updateMotion() {
 		double momentum = 0.25D;
 		double falling = this.hasNoGravity() ? 0 : -0.02;
@@ -266,9 +255,7 @@ public class SnowboardEntity extends Entity {
 				break;
 			}
 		case ON_SNOW:
-			momentum = isHoldingSkiSticks(this.getControllingPassenger())
-					? SkiingConfig.COMMON_CONFIG.ON_SNOW_WITH_STICKS_MOMENTUM.get()
-					: SkiingConfig.COMMON_CONFIG.ON_SNOW_MOMENTUM.get();
+			momentum = SkiingConfig.COMMON_CONFIG.ON_SNOW_MOMENTUM.get();
 			break;
 		default:
 			momentum = SkiingConfig.COMMON_CONFIG.DEFAULT_MOMENTUM.get();
