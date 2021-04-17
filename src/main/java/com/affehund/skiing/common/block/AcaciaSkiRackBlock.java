@@ -39,10 +39,9 @@ public class AcaciaSkiRackBlock extends AbstractSkiRackBlock {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof AcaciaSkiRackTileEntity) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, (AcaciaSkiRackTileEntity) tile, pos);
-				return ActionResultType.SUCCESS;
 			}
 		}
-		return ActionResultType.FAIL;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override

@@ -1,15 +1,21 @@
 package com.affehund.skiing.core.init;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import com.affehund.skiing.core.ModConstants;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
@@ -26,43 +32,58 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModVillagers {
+	public static final Set<BlockState> ANY_SKI_RACK = new HashSet<BlockState>();
+
 	public static final DeferredRegister<PointOfInterestType> POINTS_OF_INTEREST = DeferredRegister
 			.create(ForgeRegistries.POI_TYPES, ModConstants.MOD_ID);
 
 	public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister
 			.create(ForgeRegistries.PROFESSIONS, ModConstants.MOD_ID);
 
-	public static RegistryObject<PointOfInterestType> SKIS_MERCHANT_POI = POINTS_OF_INTEREST.register(
+	public static final RegistryObject<PointOfInterestType> SKIS_MERCHANT_POI = POINTS_OF_INTEREST.register(
 			ModConstants.RegistryStrings.SKIS_MERCHANT_POI,
-			() -> new PointOfInterestType(ModConstants.RegistryStrings.SKIS_MERCHANT_POI,
-					PointOfInterestType.getAllStates(Blocks.CRAFTING_TABLE), 1, 1));
+			() -> createPointOfInterestType(ModConstants.RegistryStrings.SKIS_MERCHANT_POI,
+					ModBlocks.BLOCKS.getEntries().stream().map(block -> block.get()).toArray(Block[]::new)));
 
-	public static RegistryObject<VillagerProfession> SKIS_MERCHANT = PROFESSIONS.register(
+	public static final RegistryObject<VillagerProfession> SKIS_MERCHANT = PROFESSIONS.register(
 			ModConstants.RegistryStrings.SKIS_MERCHANT,
 			() -> new VillagerProfession(ModConstants.RegistryStrings.SKIS_MERCHANT, SKIS_MERCHANT_POI.get(),
 					ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ENTITY_VILLAGER_WORK_ARMORER));
-	
-	public static void initVillagers() {
-		registerPointOfInterests();
-		registerVillagerHouses();
+
+	private static PointOfInterestType createPointOfInterestType(String name, Collection<BlockState> blockStates,
+			int maxFreeTickets, int validRange) {
+		PointOfInterestType poiType = new PointOfInterestType(name, ImmutableSet.copyOf(blockStates), maxFreeTickets,
+				validRange);
+		PointOfInterestType.registerBlockStates(poiType);
+		return poiType;
 	}
 
-	private static void registerPointOfInterests() {
-		PointOfInterestType.registerBlockStates(ModVillagers.SKIS_MERCHANT_POI.get());
+	private static PointOfInterestType createPointOfInterestType(String name, int maxFreeTickets, int validRange,
+			Block... blocks) {
+		return createPointOfInterestType(name,
+				ImmutableSet.copyOf(Stream.of(blocks).map(x -> x.getStateContainer().getValidStates())
+						.flatMap(ImmutableList::stream).toArray(BlockState[]::new)),
+				maxFreeTickets, validRange);
 	}
 
-	private static void registerVillagerHouses() {
+	private static PointOfInterestType createPointOfInterestType(String name, Block... blocks) {
+		return createPointOfInterestType(name, 1, 1, blocks);
+	}
+
+	public static void registerVillagerHouses() {
 		SnowyVillagePools.init();
-			addToPool(new ResourceLocation("village/snowy/houses"),
-					new ResourceLocation(ModConstants.MOD_ID, "village/" + "snowy_" + ModConstants.RegistryStrings.SKIS_MERCHANT + "_house_1"), 1);
+		addToPool(new ResourceLocation("village/snowy/houses"), new ResourceLocation(ModConstants.MOD_ID,
+				"village/" + "snowy_" + ModConstants.RegistryStrings.SKIS_MERCHANT + "_house_1"), 1);
 	}
-	
+
 	private static void addToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
 		JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
 		List<JigsawPiece> shuffled = old.getShuffledPieces(new Random());
 		List<Pair<JigsawPiece, Integer>> newPieces = new ArrayList<>();
-		for (JigsawPiece p : shuffled) newPieces.add(new Pair<>(p, 1));
-		newPieces.add(Pair.of(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID), weight));
+		for (JigsawPiece p : shuffled)
+			newPieces.add(new Pair<>(p, 1));
+		newPieces.add(Pair.of(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a,
+				JigsawPattern.PlacementBehaviour.RIGID), weight));
 		ResourceLocation name = old.getName();
 		Registry.register(WorldGenRegistries.JIGSAW_POOL, pool, new JigsawPattern(pool, name, newPieces));
 	}

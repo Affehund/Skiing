@@ -17,6 +17,8 @@ import net.minecraftforge.fml.config.ModConfig;
 @Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Bus.MOD)
 public class SkiingConfig {
 	public static class SkiingCommonConfig {
+		public final BooleanValue GENERATE_ALPS_BIOME;
+
 		public final BooleanValue CROSS_SKIING;
 		public final DoubleValue DEFAULT_MOMENTUM;
 		public final DoubleValue IN_AIR_MOMENTUM;
@@ -32,7 +34,10 @@ public class SkiingConfig {
 		public final IntValue REMOVE_SNOW_LAYERS_CHANCE;
 
 		public SkiingCommonConfig(ForgeConfigSpec.Builder builder) {
-			builder.comment("Skiing Common Config").push("skis_entity");
+			builder.comment("Skiing Common Config").push("general");
+			GENERATE_ALPS_BIOME = builder.comment("This sets whether the alps biome will generate.")
+					.define("generate_alps_biome", true);
+
 			CROSS_SKIING = builder.comment("This sets whether you are slowed down on non-snowy blocks.")
 					.define("cross_skiing", false);
 			DEFAULT_MOMENTUM = builder.comment("This sets the default momentum (not very interesting).")

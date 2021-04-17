@@ -1,6 +1,7 @@
 package com.affehund.skiing.core.init;
 
 import com.affehund.skiing.core.ModConstants;
+import com.affehund.skiing.core.config.SkiingConfig;
 import com.google.common.base.Supplier;
 
 import net.minecraft.util.RegistryKey;
@@ -20,7 +21,9 @@ public class ModBiomes {
 			ModConstants.MOD_ID);
 
 	static {
-		createBiome(ModConstants.RegistryStrings.ALPS_BIOME, BiomeMaker::makeVoidBiome);
+		if (SkiingConfig.COMMON_CONFIG.GENERATE_ALPS_BIOME.get()) {
+			createBiome(ModConstants.RegistryStrings.ALPS_BIOME, BiomeMaker::makeVoidBiome);
+		}
 	}
 
 	public static RegistryObject<Biome> createBiome(String name, Supplier<Biome> biome) {
@@ -35,6 +38,8 @@ public class ModBiomes {
 	}
 
 	public static void registerBiomes() {
-		BiomeManager.addBiome(BiomeManager.BiomeType.ICY, new BiomeManager.BiomeEntry(ALPS_BIOME_KEY, 5));
+		if (SkiingConfig.COMMON_CONFIG.GENERATE_ALPS_BIOME.get()) {
+			BiomeManager.addBiome(BiomeManager.BiomeType.ICY, new BiomeManager.BiomeEntry(ALPS_BIOME_KEY, 5));
+		}
 	}
 }

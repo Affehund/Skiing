@@ -51,5 +51,4 @@ public class ModBlocks {
 	public static final RegistryObject<Block> WARPED_SKI_RACK_BLOCK = BLOCKS.register(
 			"warped_" + ModConstants.RegistryStrings.SKI_RACK,
 			() -> new WarpedSkiRackBlock(Block.Properties.create(Material.WOOD)));
-
 }

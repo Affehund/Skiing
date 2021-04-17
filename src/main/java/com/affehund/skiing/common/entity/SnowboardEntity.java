@@ -333,7 +333,7 @@ public class SnowboardEntity extends Entity {
 					&& ((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode;
 			if (isCreative || this.getDamageTaken() > 40.0F) {
 				if (!isCreative && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-					ItemStack stack = new ItemStack(ModItems.SKIS_ITEM.get());
+					ItemStack stack = new ItemStack(ModItems.SNOWBOARD_ITEM.get());
 					((SnowboardItem) stack.getItem()).setSnowboardType(stack, this.getSnowboardType().getName());
 					this.entityDropItem(stack);
 				}
@@ -428,7 +428,6 @@ public class SnowboardEntity extends Entity {
 			this.plank = plank;
 			this.slab = slab;
 			this.texture = texture;
-
 		}
 
 		public Item getItem() {

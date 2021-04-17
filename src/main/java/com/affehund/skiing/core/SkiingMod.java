@@ -30,6 +30,7 @@ import com.affehund.skiing.common.entity.SnowboardEntity;
 import com.affehund.skiing.common.item.PulloverItem;
 import com.affehund.skiing.common.item.SkisItem;
 import com.affehund.skiing.common.item.SnowShovel;
+import com.affehund.skiing.common.item.SnowboardItem;
 import com.affehund.skiing.core.config.SkiingConfig;
 import com.affehund.skiing.core.data.gen.ModDataGeneration;
 import com.affehund.skiing.core.event.SnowWorldTickEvent;
@@ -118,18 +119,20 @@ public class SkiingMod {
 		ModContainers.CONTAINERS.register(modEventBus);
 		ModEntities.ENTITIES.register(modEventBus);
 		ModPaintings.PAINTINGS.register(modEventBus);
+		ModBiomes.BIOMES.register(modEventBus);
 		ModVillagers.POINTS_OF_INTEREST.register(modEventBus);
 		ModVillagers.PROFESSIONS.register(modEventBus);
-		ModBiomes.BIOMES.register(modEventBus);
 		ModBiomes.registerBiomes();
 
 		ModLoadingContext.get().registerConfig(Type.COMMON, SkiingConfig.COMMON_CONFIG_SPEC, COMMON_CONFIG_NAME);
+
+		LOGGER.info(ModConstants.NAME + " has finished loading for now!");
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
 		LOGGER.info("Common setup!");
 		event.enqueueWork(() -> {
-			ModVillagers.initVillagers();
+			ModVillagers.registerVillagerHouses();
 		});
 	}
 
@@ -169,7 +172,6 @@ public class SkiingMod {
 		if (event.includeServer()) {
 			BlockTagsProvider blockTagsProvider = new ModDataGeneration.BlockTagsGen(generator, ModConstants.MOD_ID,
 					existingFileHelper);
-
 			generator.addProvider(blockTagsProvider);
 			generator.addProvider(new ModDataGeneration.ItemTagsGen(generator, blockTagsProvider, ModConstants.MOD_ID,
 					existingFileHelper));
@@ -201,6 +203,8 @@ public class SkiingMod {
 
 			apprentice.add(new BasicTrade(getRandomIntInRange(1, 3), randomSkisItemStack(), 20, 10));
 			apprentice.add(new BasicTrade(getRandomIntInRange(1, 3), randomSkisItemStack(), 20, 10));
+			apprentice.add(new BasicTrade(getRandomIntInRange(1, 3), randomSnowboardItemStack(), 20, 10));
+			apprentice.add(new BasicTrade(getRandomIntInRange(1, 3), randomSnowboardItemStack(), 20, 10));
 			apprentice.add(
 					new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), 20, 10));
 			apprentice.add(
@@ -210,13 +214,17 @@ public class SkiingMod {
 					new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(ModItems.CHOCOLATE_CUP.get()), 20, 10));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
 			journeyman.add(new BasicTrade(randomPulloverStack(), new ItemStack(Items.EMERALD, 2), 20, 10, 1f));
+			journeyman.add(new BasicTrade(getRandomIntInRange(4, 7),
+					new ItemStack(ModBlocks.BLOCKS.getEntries().iterator().next().get()), 20, 10));
 
 			expert.add(new BasicTrade(new ItemStack(ModItems.SKI_STICK_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2),
 					20, 10, 1f));
-			expert.add(new BasicTrade(new ItemStack(ModItems.SNOWBOARD_ITEM.get(), 2), new ItemStack(Items.EMERALD, 2),
+			expert.add(new BasicTrade(new ItemStack(ModItems.SNOWBOARD_ITEM.get(), 1), new ItemStack(Items.EMERALD, 2),
 					20, 10, 1f));
 			expert.add(new BasicTrade(randomSkisItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
 			expert.add(new BasicTrade(randomSkisItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
+			expert.add(new BasicTrade(randomSnowboardItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
+			expert.add(new BasicTrade(randomSnowboardItemStack(), new ItemStack(Items.EMERALD), 20, 10, 1f));
 
 			master.add(new BasicTrade(getRandomIntInRange(2, 4), new ItemStack(Items.SNOWBALL, 16), 20, 10));
 			master.add(new BasicTrade(getRandomIntInRange(3, 5), new ItemStack(Items.SNOW_BLOCK, 8), 20, 10));
@@ -230,17 +238,24 @@ public class SkiingMod {
 	}
 
 	private static ItemStack randomPulloverStack() {
-		ItemStack pulloverStack = new ItemStack(ModItems.PULLOVER.get());
-		((PulloverItem) pulloverStack.getItem()).setColor(pulloverStack,
+		ItemStack stack = new ItemStack(ModItems.PULLOVER.get());
+		((PulloverItem) stack.getItem()).setColor(stack,
 				DyeColor.values()[new Random().nextInt(DyeColor.values().length)].getFireworkColor());
-		return pulloverStack;
+		return stack;
 	}
 
 	private static ItemStack randomSkisItemStack() {
-		ItemStack skisStack = new ItemStack(ModItems.SKIS_ITEM.get());
+		ItemStack stack = new ItemStack(ModItems.SKIS_ITEM.get());
 		SkisEntity.SkisType type = SkisEntity.SkisType.getRandom();
-		((SkisItem) skisStack.getItem()).setSkisType(skisStack, type.name());
-		return skisStack;
+		((SkisItem) stack.getItem()).setSkisType(stack, type.name());
+		return stack;
+	}
+
+	private static ItemStack randomSnowboardItemStack() {
+		ItemStack stack = new ItemStack(ModItems.SNOWBOARD_ITEM.get());
+		SnowboardEntity.SnowboardType type = SnowboardEntity.SnowboardType.getRandom();
+		((SnowboardItem) stack.getItem()).setSnowboardType(stack, type.name());
+		return stack;
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
