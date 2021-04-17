@@ -3,13 +3,13 @@
   	"1.16.5" : {
     	"skiing-1.16.5-1.1.0" : "Additions:\n- ski rack: place down your skis and ski sticks in the new ski rack\n- a new config to change some values for skis and snow layering\n - snow layering mechanic: snow layers will be placed when it snows / removed when it stops snowing\n\nChanges:\n- new skis item pose\n - lowercased the of the skis item nbt\n-small tweaks and fixes",
     	"skiing-1.16.5-1.2.0" : "Additions:\n- more ski racks: acacia, birch, crimson, dark oak, jungle, oak, spruce, warped\n- snowboard. It's a skiing mod, but snowboards are cool, too, aren't they?\n\nremoved old stuff, fixed small issues",
-    	"skiing-1.16.5-1.3.0" : "Additions:\n- config to disable/enable generation of the alps biome\nChanges:\n- merchants workstation to ski racks (all types)\nFixed:\n- dropped skis item instead if snowboard item\n- placing block on client side when opening skiing rack container with a block/ski sticks work for snowboards"
+    	"skiing-1.16.5-1.3.0" : "Additions:\n- config to disable/enable generation of the alps biome\nChanges:\n- merchants workstation to ski racks (all types)\nFixed:\n- dropped skis item instead of snowboard item\n- placing block on client side when opening skiing rack container with a block\nski sticks work for snowboards"
   	},
   	"1.16.4" : {
     	"skiing-1.16.4-1.0.0" : "Initial release",
     	"skiing-1.16.5-1.1.0" : "Additions:\n- ski rack: place down your skis and ski sticks in the new ski rack\n- a new config to change some values the skis and snow layering\n - snow layering mechanic: snow layers will be placed when it snows / removed when it stops snowing\n\nChanges:\n- new skis item pose\n- lowercased the of the skis item nbt\n-small tweaks and fixes",
     	"skiing-1.16.5-1.2.0" : "Additions:\n- more ski racks: acacia, birch, crimson, dark oak, jungle, oak, spruce, warped\n- snowboard. It's a skiing mod, but snowboards are cool, too, aren't they?\n\nremoved old stuff, fixed small issues",
-      	"skiing-1.16.5-1.3.0" : "Additions:\n- config to disable/enable generation of the alps biome\nChanges:\n- merchants workstation to ski racks (all types)\nFixed:\n- dropped skis item instead if snowboard item\n- placing block on client side when opening skiing rack container with a block/ski sticks work for snowboards"
+      	"skiing-1.16.5-1.3.0" : "Additions:\n- config to disable/enable generation of the alps biome\nChanges:\n- merchants workstation to ski racks (all types)\nFixed:\n- dropped skis item instead of snowboard item\n- placing block on client side when opening skiing rack container with a block\nski sticks work for snowboards"
   	},
   	"promos" : {
     	"1.16.5-latest" : "skiing-1.16.5-1.3.0",
