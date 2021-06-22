@@ -1,6 +1,6 @@
-[![Curse Forge Project](http://cf.way2muchnoise.eu/versions/skiing.svg)](https://www.curseforge.com/minecraft/mc-mods/skiing/)
-[![Download](http://cf.way2muchnoise.eu/full_skiing_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/skiing/files/)
-[![Lines of Code](https://tokei.rs/b1/github/affehund/Skiing?category=code)](https://github.com/Affehund/Skiing)
+[![Curse Forge Project](http://cf.way2muchnoise.eu/versions/For%20Minecraft_425810_all.svg)](https://www.curseforge.com/minecraft/mc-mods/skiing/)
+[![Download](http://cf.way2muchnoise.eu/full_425810_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/skiing/files/)
+[![Lines of Code](https://tokei.rs/b1/github/Affehund/Skiing?category=code)](https://github.com/Affehund/Skiing)
 
 ## Skiing Mod
 You like skiing? Now you can do it in minecraft!
