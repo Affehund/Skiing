@@ -48,7 +48,7 @@ public class ModVillagers {
 	public static final RegistryObject<VillagerProfession> SKIS_MERCHANT = PROFESSIONS.register(
 			ModConstants.RegistryStrings.SKIS_MERCHANT,
 			() -> new VillagerProfession(ModConstants.RegistryStrings.SKIS_MERCHANT, SKIS_MERCHANT_POI.get(),
-					ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ENTITY_VILLAGER_WORK_ARMORER));
+					ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_ARMORER));
 
 	private static PointOfInterestType createPointOfInterestType(String name, Collection<BlockState> blockStates,
 			int maxFreeTickets, int validRange) {
@@ -61,7 +61,7 @@ public class ModVillagers {
 	private static PointOfInterestType createPointOfInterestType(String name, int maxFreeTickets, int validRange,
 			Block... blocks) {
 		return createPointOfInterestType(name,
-				ImmutableSet.copyOf(Stream.of(blocks).map(x -> x.getStateContainer().getValidStates())
+				ImmutableSet.copyOf(Stream.of(blocks).map(x -> x.getStateDefinition().getPossibleStates())
 						.flatMap(ImmutableList::stream).toArray(BlockState[]::new)),
 				maxFreeTickets, validRange);
 	}
@@ -71,20 +71,20 @@ public class ModVillagers {
 	}
 
 	public static void registerVillagerHouses() {
-		SnowyVillagePools.init();
+		SnowyVillagePools.bootstrap();
 		addToPool(new ResourceLocation("village/snowy/houses"), new ResourceLocation(ModConstants.MOD_ID,
 				"village/" + "snowy_" + ModConstants.RegistryStrings.SKIS_MERCHANT + "_house_1"), 1);
 	}
 
 	private static void addToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
-		JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
-		List<JigsawPiece> shuffled = old.getShuffledPieces(new Random());
+		JigsawPattern old = WorldGenRegistries.TEMPLATE_POOL.get(pool);
+		List<JigsawPiece> shuffled = old.getShuffledTemplates(new Random());
 		List<Pair<JigsawPiece, Integer>> newPieces = new ArrayList<>();
 		for (JigsawPiece p : shuffled)
 			newPieces.add(new Pair<>(p, 1));
-		newPieces.add(Pair.of(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a,
+		newPieces.add(Pair.of(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.EMPTY,
 				JigsawPattern.PlacementBehaviour.RIGID), weight));
 		ResourceLocation name = old.getName();
-		Registry.register(WorldGenRegistries.JIGSAW_POOL, pool, new JigsawPattern(pool, name, newPieces));
+		Registry.register(WorldGenRegistries.TEMPLATE_POOL, pool, new JigsawPattern(pool, name, newPieces));
 	}
 }

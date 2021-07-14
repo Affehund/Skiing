@@ -23,28 +23,28 @@ public class SkisItemISTER extends ItemStackTileEntityRenderer {
 	}
 
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType transformType, MatrixStack matrixStack,
+	public void renderByItem(ItemStack stack, TransformType transformType, MatrixStack matrixStack,
 			IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 		if (stack.getItem() instanceof SkisItem) {
-			matrixStack.push();
+			matrixStack.pushPose();
 			matrixStack.translate(0.5, 0, 0.5);
 			if (transformType == ItemCameraTransforms.TransformType.GUI) {
-				matrixStack.rotate(Vector3f.YP.rotationDegrees(180));
+				matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
 			}
 
 			if (transformType == ItemCameraTransforms.TransformType.FIXED) {
-				matrixStack.rotate(Vector3f.XN.rotationDegrees(180));
+				matrixStack.mulPose(Vector3f.XN.rotationDegrees(180));
 			}
 			
 			Minecraft mc =  Minecraft.getInstance();
-			SkisEntity skis = new SkisEntity(ModEntities.SKI_ENTITY.get(), mc.world);
-			EntityRenderer<? super SkisEntity> render = mc.getRenderManager().getRenderer(skis);
-			if (mc.world != null) {
-				skis.setWorld(mc.world);
+			SkisEntity skis = new SkisEntity(ModEntities.SKI_ENTITY.get(), mc.level);
+			EntityRenderer<? super SkisEntity> render = mc.getEntityRenderDispatcher().getRenderer(skis);
+			if (mc.level != null) {
+				skis.setLevel(mc.level);
 			}
 			skis.setSkisType(SkisItem.getSkisType(stack));
-			render.render(skis, 0, mc.getRenderPartialTicks(), matrixStack, buffer, combinedLight);
-			matrixStack.pop();
+			render.render(skis, 0, mc.getFrameTime(), matrixStack, buffer, combinedLight);
+			matrixStack.popPose();
 		}
 	}
 }

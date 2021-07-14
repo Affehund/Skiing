@@ -31,7 +31,7 @@ public class DarkOakSkiRackTileEntity extends AbstractSkiRackTileEntity {
 
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(ModBlocks.DARK_OAK_SKI_RACK_BLOCK.get().getTranslationKey());
+		return new TranslationTextComponent(ModBlocks.DARK_OAK_SKI_RACK_BLOCK.get().getDescriptionId());
 	}
 
 }

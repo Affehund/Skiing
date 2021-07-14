@@ -16,15 +16,15 @@ public class ModTags {
 		public static final ITag.INamedTag<Block> SNOWY_BLOCKS = modTag("snowy_blocks");
 
 		private static ITag.INamedTag<Block> forgeTag(String name) {
-			return BlockTags.makeWrapperTag("forge:" + name);
+			return BlockTags.bind("forge:" + name);
 		}
 
 		private static ITag.INamedTag<Block> modTag(String name) {
-			return BlockTags.makeWrapperTag(ModConstants.MOD_ID + ":" + name);
+			return BlockTags.bind(ModConstants.MOD_ID + ":" + name);
 		}
 
 		private static ITag.INamedTag<Block> vanillaTag(String name) {
-			return BlockTags.makeWrapperTag(name);
+			return BlockTags.bind(name);
 		}
 	}
 
@@ -32,29 +32,29 @@ public class ModTags {
 		public static final ITag.INamedTag<Item> WOOL = forgeTag("wool");
 
 		private static ITag.INamedTag<Item> forgeTag(String name) {
-			return ItemTags.makeWrapperTag("forge:" + name);
+			return ItemTags.bind("forge:" + name);
 		}
 
 		private static ITag.INamedTag<Item> modTag(String name, String modID) {
-			return ItemTags.makeWrapperTag(modID + ":" + name);
+			return ItemTags.bind(modID + ":" + name);
 		}
 
 		private static ITag.INamedTag<Item> vanillaTag(String name) {
-			return ItemTags.makeWrapperTag(name);
+			return ItemTags.bind(name);
 		}
 	}
 
 	public static class Fluids {
 		private static ITag.INamedTag<Fluid> forgeTag(String name) {
-			return FluidTags.makeWrapperTag("forge:" + name);
+			return FluidTags.bind("forge:" + name);
 		}
 
 		private static ITag.INamedTag<Fluid> modTag(String name, String modID) {
-			return FluidTags.makeWrapperTag(modID + ":" + name);
+			return FluidTags.bind(modID + ":" + name);
 		}
 
 		private static ITag.INamedTag<Fluid> vanillaTag(String name) {
-			return FluidTags.makeWrapperTag(name);
+			return FluidTags.bind(name);
 		}
 	}
 }

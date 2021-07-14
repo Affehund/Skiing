@@ -27,7 +27,7 @@ public class AcaciaSkiRackContainer extends AbstractSkiRackContainer {
 			final AcaciaSkiRackTileEntity tileEntityIn) {
 		super(ModContainers.ACACIA_SKI_RACK_CONTAINER.get(), windowId);
 		this.tileEntity = tileEntityIn;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntityIn.getWorld(), tileEntityIn.getPos());
+		this.canInteractWithCallable = IWorldPosCallable.create(tileEntityIn.getLevel(), tileEntityIn.getBlockPos());
 
 		// container slots
 		int index = 0;
@@ -50,7 +50,7 @@ public class AcaciaSkiRackContainer extends AbstractSkiRackContainer {
 	private static AcaciaSkiRackTileEntity getTileEntity(final PlayerInventory playerInv, final PacketBuffer data) {
 		Objects.requireNonNull(playerInv, "playerInv cannot be null");
 		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInv.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInv.player.level.getBlockEntity(data.readBlockPos());
 		if (tileAtPos instanceof AcaciaSkiRackTileEntity) {
 			return (AcaciaSkiRackTileEntity) tileAtPos;
 		}
@@ -58,8 +58,8 @@ public class AcaciaSkiRackContainer extends AbstractSkiRackContainer {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(canInteractWithCallable, playerIn, ModBlocks.ACACIA_SKI_RACK_BLOCK.get());
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(canInteractWithCallable, playerIn, ModBlocks.ACACIA_SKI_RACK_BLOCK.get());
 	}
 
 }

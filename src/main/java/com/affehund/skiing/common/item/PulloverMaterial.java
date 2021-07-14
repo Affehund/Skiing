@@ -13,8 +13,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum PulloverMaterial implements IArmorMaterial {
-   PULLOVER("pullover", 5, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> {
-      return Ingredient.fromTag(ModTags.Items.WOOL);
+   PULLOVER("pullover", 5, new int[]{1, 2, 3, 1}, 0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> {
+      return Ingredient.of(ModTags.Items.WOOL);
    });
 
    private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -39,28 +39,28 @@ public enum PulloverMaterial implements IArmorMaterial {
    }
 
    @Override
-   public int getDurability(EquipmentSlotType slotIn) {
+   public int getDurabilityForSlot(EquipmentSlotType slotIn) {
       return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
    }
 
    @Override
-   public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+   public int getDefenseForSlot(EquipmentSlotType slotIn) {
       return this.damageReductionAmountArray[slotIn.getIndex()];
    }
 
    @Override
-   public int getEnchantability() {
+   public int getEnchantmentValue() {
       return this.enchantability;
    }
 
    @Override
-   public SoundEvent getSoundEvent() {
+   public SoundEvent getEquipSound() {
       return this.soundEvent;
    }
 
    @Override
-   public Ingredient getRepairMaterial() {
-      return this.repairMaterial.getValue();
+   public Ingredient getRepairIngredient() {
+      return this.repairMaterial.get();
    }
 
    @OnlyIn(Dist.CLIENT)

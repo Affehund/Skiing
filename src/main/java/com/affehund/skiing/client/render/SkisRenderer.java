@@ -26,11 +26,11 @@ public class SkisRenderer extends EntityRenderer<SkisEntity> {
 	@Override
 	public void render(SkisEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
 			IRenderTypeBuffer bufferIn, int packedLightIn) {
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 
 		matrixStackIn.translate(0.0D, 1.5D, 0.0D);
-		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90.0F - entityYaw));
-		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180F));
+		matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F - entityYaw));
+		matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180F));
 		float f = (float) entityIn.getTimeSinceHit() - partialTicks;
 		float f1 = entityIn.getDamageTaken() - partialTicks;
 		if (f1 < 0.0F) {
@@ -38,22 +38,22 @@ public class SkisRenderer extends EntityRenderer<SkisEntity> {
 		}
 
 		if (f > 0.0F) {
-			matrixStackIn.rotate(Vector3f.XP
+			matrixStackIn.mulPose(Vector3f.XP
 					.rotationDegrees(MathHelper.sin(f) * f * f1 / 45.0F * (float) entityIn.getForwardDirection()));
 		}
 		
-		this.model.setRotationAngles(entityIn, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F);
+		this.model.setupAnim(entityIn, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F);
 
-		IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.getRenderType(this.getEntityTexture(entityIn)));
-		this.model.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+		IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
+		this.model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
 				1.0F);
 
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(SkisEntity entity) {
+	public ResourceLocation getTextureLocation(SkisEntity entity) {
 		return entity.getSkisType().getTexture();
 	}
 }

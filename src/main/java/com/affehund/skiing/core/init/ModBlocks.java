@@ -16,39 +16,41 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import net.minecraft.block.AbstractBlock;
+
 public class ModBlocks {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
 			ModConstants.MOD_ID);
 
 	public static final RegistryObject<Block> ACACIA_SKI_RACK_BLOCK = BLOCKS.register(
 			"acacia_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new AcaciaSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new AcaciaSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> BIRCH_SKI_RACK_BLOCK = BLOCKS.register(
 			"birch_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new BirchSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new BirchSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> CRIMSON_SKI_RACK_BLOCK = BLOCKS.register(
 			"crimson_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new CrimsonSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new CrimsonSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> DARK_OAK_SKI_RACK_BLOCK = BLOCKS.register(
 			"dark_oak_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new DarkOakSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new DarkOakSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> JUNGLE_SKI_RACK_BLOCK = BLOCKS.register(
 			"jungle_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new JungleSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new JungleSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> OAK_SKI_RACK_BLOCK = BLOCKS.register(
 			"oak_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new OakSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new OakSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> SPRUCE_SKI_RACK_BLOCK = BLOCKS.register(
 			"spruce_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new SpruceSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new SpruceSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 
 	public static final RegistryObject<Block> WARPED_SKI_RACK_BLOCK = BLOCKS.register(
 			"warped_" + ModConstants.RegistryStrings.SKI_RACK,
-			() -> new WarpedSkiRackBlock(Block.Properties.create(Material.WOOD)));
+			() -> new WarpedSkiRackBlock(AbstractBlock.Properties.of(Material.WOOD)));
 }

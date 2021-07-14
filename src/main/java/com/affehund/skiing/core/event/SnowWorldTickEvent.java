@@ -33,23 +33,23 @@ public class SnowWorldTickEvent {
 		}
 
 		ServerWorld world = (ServerWorld) event.world;
-		ServerChunkProvider chunkProvider = world.getChunkProvider();
-		if (chunkProvider.getChunkGenerator() instanceof DebugChunkGenerator) {
+		ServerChunkProvider chunkProvider = world.getChunkSource();
+		if (chunkProvider.getGenerator() instanceof DebugChunkGenerator) {
 			return;
 		}
 
-		chunkProvider.chunkManager.getLoadedChunksIterable().forEach(holder -> {
-			Optional<Chunk> optional = holder.getEntityTickingFuture().getNow(ChunkHolder.UNLOADED_CHUNK).left();
-			if (optional.isPresent() && world.rand.nextInt(16) == 0) {
+		chunkProvider.chunkMap.getChunks().forEach(holder -> {
+			Optional<Chunk> optional = holder.getEntityTickingChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left();
+			if (optional.isPresent() && world.random.nextInt(16) == 0) {
 				Chunk chunk = optional.get();
-				int x = chunk.getPos().getXStart();
-				int z = chunk.getPos().getZStart();
+				int x = chunk.getPos().getMinBlockX();
+				int z = chunk.getPos().getMinBlockZ();
 
 				if (world.isRaining()) {
 					// chance to add snow layers
 					if (SkiingConfig.COMMON_CONFIG.ADD_SNOW_LAYERS.get()) {
-						if (world.rand.nextInt(SkiingConfig.COMMON_CONFIG.ADD_SNOW_LAYERS_CHANCE.get()) == 0) {
-							BlockPos pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING,
+						if (world.random.nextInt(SkiingConfig.COMMON_CONFIG.ADD_SNOW_LAYERS_CHANCE.get()) == 0) {
+							BlockPos pos = world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING,
 									world.getBlockRandomPos(x, 0, z, 15));
 							if (doesSnowGenerate(world, pos, world.getBiome(pos))) {
 								addSnowLayers(world, pos);
@@ -59,8 +59,8 @@ public class SnowWorldTickEvent {
 				} else {
 					if (SkiingConfig.COMMON_CONFIG.REMOVE_SNOW_LAYERS.get()) {
 						// chance to remove snow layers
-						if (world.rand.nextInt(SkiingConfig.COMMON_CONFIG.REMOVE_SNOW_LAYERS_CHANCE.get()) == 0) {
-							BlockPos pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING,
+						if (world.random.nextInt(SkiingConfig.COMMON_CONFIG.REMOVE_SNOW_LAYERS_CHANCE.get()) == 0) {
+							BlockPos pos = world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING,
 									world.getBlockRandomPos(x, 0, z, 15));
 							removeSnowLayers(world, pos);
 						}
@@ -75,10 +75,10 @@ public class SnowWorldTickEvent {
 		if (biome.getTemperature(pos) >= 0.15F) {
 			return false;
 		} else {
-			if (pos.getY() >= 0 && pos.getY() < 256 && worldIn.getLightFor(LightType.BLOCK, pos) < 10) {
+			if (pos.getY() >= 0 && pos.getY() < 256 && worldIn.getBrightness(LightType.BLOCK, pos) < 10) {
 				BlockState blockstate = worldIn.getBlockState(pos);
 				if ((blockstate.isAir(worldIn, pos) || blockstate.getBlock() instanceof SnowBlock)
-						&& Blocks.SNOW.getDefaultState().isValidPosition(worldIn, pos)) {
+						&& Blocks.SNOW.defaultBlockState().canSurvive(worldIn, pos)) {
 					return true;
 				}
 			}
@@ -89,17 +89,17 @@ public class SnowWorldTickEvent {
 	private void addSnowLayers(ServerWorld world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
 		if (state.getBlock() instanceof SnowBlock) {
-			int layerHeight = state.get(SnowBlock.LAYERS);
+			int layerHeight = state.getValue(SnowBlock.LAYERS);
 			if (layerHeight >= 8) {
 				return;
 			}
 			float surroundingsHeight = 0;
 			for (Direction direction : Direction.values()) {
 				if (direction.getAxis() != Direction.Axis.Y) {
-					BlockState surroundingState = world.getBlockState(pos.offset(direction));
+					BlockState surroundingState = world.getBlockState(pos.relative(direction));
 					if (surroundingState.getBlock() instanceof SnowBlock) {
-						surroundingsHeight += surroundingState.get(SnowBlock.LAYERS);
-					} else if (surroundingState.isSolid()) {
+						surroundingsHeight += surroundingState.getValue(SnowBlock.LAYERS);
+					} else if (surroundingState.canOcclude()) {
 						surroundingsHeight += 8;
 					}
 				}
@@ -107,22 +107,22 @@ public class SnowWorldTickEvent {
 			surroundingsHeight /= 4;
 			if (surroundingsHeight >= layerHeight) {
 				if (layerHeight < 8) {
-					world.setBlockState(pos, state.with(SnowBlock.LAYERS, layerHeight + 1));
+					world.setBlockAndUpdate(pos, state.setValue(SnowBlock.LAYERS, layerHeight + 1));
 				}
 			}
 		} else if (state.isAir(world, pos)) {
-			world.setBlockState(pos, Blocks.SNOW.getDefaultState());
+			world.setBlockAndUpdate(pos, Blocks.SNOW.defaultBlockState());
 			if (state.hasProperty(SnowyDirtBlock.SNOWY))
-				world.setBlockState(pos, state.with(SnowyDirtBlock.SNOWY, true), 2);
+				world.setBlock(pos, state.setValue(SnowyDirtBlock.SNOWY, true), 2);
 		}
 	}
 
 	private void removeSnowLayers(ServerWorld world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
 		if (state.getBlock() instanceof SnowBlock) {
-			int currentLayers = state.get(SnowBlock.LAYERS);
+			int currentLayers = state.getValue(SnowBlock.LAYERS);
 			if (currentLayers > 1) {
-				world.setBlockState(pos, state.with(SnowBlock.LAYERS, currentLayers - 1));
+				world.setBlockAndUpdate(pos, state.setValue(SnowBlock.LAYERS, currentLayers - 1));
 			}
 		}
 	}

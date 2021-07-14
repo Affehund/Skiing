@@ -18,6 +18,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 /**
  * @author Affehund
  *
@@ -33,10 +35,10 @@ public class BirchSkiRackBlock extends AbstractSkiRackBlock {
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult hit) {
-		if (!world.isRemote) {
-			TileEntity tile = world.getTileEntity(pos);
+		if (!world.isClientSide) {
+			TileEntity tile = world.getBlockEntity(pos);
 			if (tile instanceof BirchSkiRackTileEntity) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, (BirchSkiRackTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
@@ -46,22 +48,22 @@ public class BirchSkiRackBlock extends AbstractSkiRackBlock {
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
 			if (tileentity instanceof BirchSkiRackTileEntity) {
-				InventoryHelper.dropInventoryItems(worldIn, pos, (BirchSkiRackTileEntity) tileentity);
-				worldIn.updateComparatorOutputLevel(pos, this);
+				InventoryHelper.dropContents(worldIn, pos, (BirchSkiRackTileEntity) tileentity);
+				worldIn.updateNeighbourForOutputSignal(pos, this);
 			}
 		}
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		if (stack.hasDisplayName()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (stack.hasCustomHoverName()) {
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
 			if (tileentity instanceof BirchSkiRackTileEntity) {
-				((BirchSkiRackTileEntity) tileentity).setCustomName(stack.getDisplayName());
+				((BirchSkiRackTileEntity) tileentity).setCustomName(stack.getHoverName());
 			}
 		}
 	}

@@ -29,15 +29,15 @@ public abstract class AbstractSkiRackTileEntity extends LockableLootTileEntity {
 	}
 
 	@Override
-	public void read(BlockState blockState, CompoundNBT compound) {
-		super.read(blockState, compound);
-		this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+	public void load(BlockState blockState, CompoundNBT compound) {
+		super.load(blockState, compound);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(compound, this.items);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		ItemStackHelper.saveAllItems(compound, this.items);
 		return compound;
 	}
@@ -53,14 +53,14 @@ public abstract class AbstractSkiRackTileEntity extends LockableLootTileEntity {
 	}
 
 	@Override
-	public void markDirty() {
-		super.markDirty();
-		this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(),
+	public void setChanged() {
+		super.setChanged();
+		this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(),
 				Constants.BlockFlags.BLOCK_UPDATE);
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.items.size();
 	}
 
@@ -79,7 +79,7 @@ public abstract class AbstractSkiRackTileEntity extends LockableLootTileEntity {
 			ItemStack itemstack = this.items.get(i);
 			if (itemstack.isEmpty()) {
 				this.items.set(i, itemStackIn.split(1));
-				this.markDirty();
+				this.setChanged();
 				return true;
 			}
 		}
@@ -87,37 +87,37 @@ public abstract class AbstractSkiRackTileEntity extends LockableLootTileEntity {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.items.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.items, index, count);
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.items, index, count);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.items, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.items, index);
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		ItemStack itemStack = this.items.get(index);
-		boolean flag = !stack.isEmpty() && stack.isItemEqual(itemStack)
-				&& ItemStack.areItemStackTagsEqual(stack, itemStack);
+		boolean flag = !stack.isEmpty() && stack.sameItem(itemStack)
+				&& ItemStack.tagMatches(stack, itemStack);
 		this.items.set(index, stack);
-		if (stack.getCount() > this.getInventoryStackLimit()) {
-			stack.setCount(this.getInventoryStackLimit());
+		if (stack.getCount() > this.getMaxStackSize()) {
+			stack.setCount(this.getMaxStackSize());
 		}
 
 		if (!flag) {
-			this.markDirty();
+			this.setChanged();
 		}
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
+	public boolean canPlaceItem(int index, ItemStack stack) {
 		if ((index == 0 || index == 1) && !(stack.getItem() instanceof SkisItem)) {
 			return false;
 		} else if ((index == 2 || index == 3) && stack.getItem() != ModItems.SKI_STICK_ITEM.get()) {
@@ -127,30 +127,30 @@ public abstract class AbstractSkiRackTileEntity extends LockableLootTileEntity {
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.items.clear();
 	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbt = new CompoundNBT();
-		this.write(nbt);
-		return new SUpdateTileEntityPacket(this.getPos(), 1, nbt);
+		this.save(nbt);
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 1, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(getBlockState(), pkt.getNbtCompound());
+		this.load(getBlockState(), pkt.getTag());
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		return this.write(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 
 	@Override
 	public void handleUpdateTag(BlockState blockState, CompoundNBT tag) {
-		this.read(blockState, tag);
+		this.load(blockState, tag);
 	}
 
 	@Override

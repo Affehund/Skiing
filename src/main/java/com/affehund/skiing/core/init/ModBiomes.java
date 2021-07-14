@@ -22,7 +22,7 @@ public class ModBiomes {
 
 	static {
 		if (SkiingConfig.COMMON_CONFIG.GENERATE_ALPS_BIOME.get()) {
-			createBiome(ModConstants.RegistryStrings.ALPS_BIOME, BiomeMaker::makeVoidBiome);
+			createBiome(ModConstants.RegistryStrings.ALPS_BIOME, BiomeMaker::theVoidBiome);
 		}
 	}
 
@@ -34,7 +34,7 @@ public class ModBiomes {
 	public static RegistryKey<Biome> ALPS_BIOME_KEY = registryKey(ModConstants.RegistryStrings.ALPS_BIOME);
 
 	public static RegistryKey<Biome> registryKey(String name) {
-		return RegistryKey.getOrCreateKey(Registry.BIOME_KEY, new ResourceLocation(ModConstants.MOD_ID, name));
+		return RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(ModConstants.MOD_ID, name));
 	}
 
 	public static void registerBiomes() {

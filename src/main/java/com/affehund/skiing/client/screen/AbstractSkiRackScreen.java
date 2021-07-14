@@ -24,36 +24,36 @@ public abstract class AbstractSkiRackScreen<T extends AbstractSkiRackContainer> 
 
 	public AbstractSkiRackScreen(T screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
-		this.guiLeft = 0;
-		this.guiTop = 0;
-		this.xSize = 176;
-		this.ySize = 166;
+		this.leftPos = 0;
+		this.topPos = 0;
+		this.imageWidth = 176;
+		this.imageHeight = 166;
 	}
 
 	@Override
 	public void render(MatrixStack matrixStack, int x, int y, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, x, y, partialTicks);
-		this.renderHoveredTooltip(matrixStack, x, y);
+		this.renderTooltip(matrixStack, x, y);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
 		String s = this.title.getString();
-		this.font.drawString(matrixStack, s, this.xSize / 2 - this.font.getStringWidth(s) / 2, 6.0F, 4210752);
-		this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, this.ySize - 96 + 2,
+		this.font.draw(matrixStack, s, this.imageWidth / 2 - this.font.width(s) / 2, 6.0F, 4210752);
+		this.font.draw(matrixStack, this.inventory.getDisplayName().getString(), 8.0F, this.imageHeight - 96 + 2,
 				4210752);
-		this.titleX = (this.xSize - this.font.getStringPropertyWidth(this.title)) / 2;
+		this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-		this.minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-		int relX = (width - xSize) / 2;
-		int relY = (height - ySize) / 2;
-		this.blit(matrixStack, relX, relY, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(BACKGROUND_TEXTURE);
+		int relX = (width - imageWidth) / 2;
+		int relY = (height - imageHeight) / 2;
+		this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 	}
 
 }

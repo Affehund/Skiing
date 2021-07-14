@@ -23,28 +23,28 @@ import net.minecraft.world.server.ServerWorld;
 
 public class SnowShovelUtils {
 	public static void breakBlocksInRadius(World world, PlayerEntity playerEntity, int radius) {
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			List<BlockPos> blocksToBreak = getBlocksToBreak(world, playerEntity, radius);
-			ItemStack heldItem = playerEntity.getHeldItemMainhand();
-			int silktouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem);
-			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, heldItem);
+			ItemStack heldItem = playerEntity.getMainHandItem();
+			int silktouch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem);
+			int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, heldItem);
 			for (BlockPos pos : blocksToBreak) {
 				BlockState state = world.getBlockState(pos);
-				if (heldItem.getItem().canHarvestBlock(state)) {
-					if (playerEntity.abilities.isCreativeMode) {
+				if (heldItem.getItem().isCorrectToolForDrops(state)) {
+					if (playerEntity.abilities.instabuild) {
 						if (state.removedByPlayer(world, pos, playerEntity, true, state.getFluidState()))
-							state.getBlock().onPlayerDestroy(world, pos, state);
+							state.getBlock().destroy(world, pos, state);
 					} else {
-						heldItem.getItem().onBlockDestroyed(heldItem, world, state, pos, playerEntity);
-						TileEntity tileEntity = world.getTileEntity(pos);
-						state.getBlock().onPlayerDestroy(world, pos, state);
-						state.getBlock().harvestBlock(world, playerEntity, pos, state, tileEntity, heldItem);
-						state.getBlock().dropXpOnBlockBreak((ServerWorld) world, pos,
+						heldItem.getItem().mineBlock(heldItem, world, state, pos, playerEntity);
+						TileEntity tileEntity = world.getBlockEntity(pos);
+						state.getBlock().destroy(world, pos, state);
+						state.getBlock().playerDestroy(world, playerEntity, pos, state, tileEntity, heldItem);
+						state.getBlock().popExperience((ServerWorld) world, pos,
 								state.getBlock().getExpDrop(state, world, pos, fortune, silktouch));
 					}
 					world.removeBlock(pos, false);
-					world.playEvent(2001, pos, Block.getStateId(state));
-					((ServerPlayerEntity) playerEntity).connection.sendPacket(new SChangeBlockPacket(world, pos));
+					world.levelEvent(2001, pos, Block.getId(state));
+					((ServerPlayerEntity) playerEntity).connection.send(new SChangeBlockPacket(world, pos));
 				}
 			}
 		}
@@ -56,7 +56,7 @@ public class SnowShovelUtils {
 		BlockRayTraceResult rayTraceResult = getLookingAtBlockRayTrace(world, player);
 
 		if (rayTraceResult.getType() == RayTraceResult.Type.BLOCK) {
-			Direction.Axis axis = rayTraceResult.getFace().getAxis();
+			Direction.Axis axis = rayTraceResult.getDirection().getAxis();
 			ArrayList<BlockPos> positions = new ArrayList<>();
 
 			for (int x = -radius; x <= radius; x++) {
@@ -67,20 +67,20 @@ public class SnowShovelUtils {
 				}
 			}
 
-			BlockPos origin = rayTraceResult.getPos();
+			BlockPos origin = rayTraceResult.getBlockPos();
 
 			for (BlockPos pos : positions) {
 				if (axis == Direction.Axis.Y) {
 					if (pos.getY() == 0) {
-						blocksList.add(origin.add(pos));
+						blocksList.add(origin.offset(pos));
 					}
 				} else if (axis == Direction.Axis.X) {
 					if (pos.getX() == 0) {
-						blocksList.add(origin.add(pos));
+						blocksList.add(origin.offset(pos));
 					}
 				} else if (axis == Direction.Axis.Z) {
 					if (pos.getZ() == 0) {
-						blocksList.add(origin.add(pos));
+						blocksList.add(origin.offset(pos));
 					}
 				}
 			}
@@ -94,10 +94,10 @@ public class SnowShovelUtils {
 
 	public static BlockRayTraceResult getLookingAtBlockRayTrace(World world, PlayerEntity player) {
 		Vector3d eyePosition = player.getEyePosition(1);
-		Vector3d rotation = player.getLook(1);
+		Vector3d rotation = player.getViewVector(1);
 		Vector3d combined = eyePosition.add(rotation.x * 5, rotation.y * 5, rotation.z * 5);
 
-		BlockRayTraceResult rayTraceResult = world.rayTraceBlocks(new RayTraceContext(eyePosition, combined,
+		BlockRayTraceResult rayTraceResult = world.clip(new RayTraceContext(eyePosition, combined,
 				RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, player));
 		return rayTraceResult;
 	}

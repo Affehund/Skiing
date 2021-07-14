@@ -31,6 +31,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 /**
  * @author Affehund
  *
@@ -39,8 +41,8 @@ public abstract class AbstractSkiRackBlock extends Block {
 	public static final DirectionProperty DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
 
 	public AbstractSkiRackBlock(Properties properties) {
-		super(properties.hardnessAndResistance(2.0f).harvestLevel(0).harvestTool(ToolType.AXE).sound(SoundType.WOOD));
-		this.setDefaultState(this.getStateContainer().getBaseState().with(DIRECTION, Direction.NORTH));
+		super(properties.strength(2.0f).harvestLevel(0).harvestTool(ToolType.AXE).sound(SoundType.WOOD));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(DIRECTION, Direction.NORTH));
 	}
 
 	@Override
@@ -52,46 +54,46 @@ public abstract class AbstractSkiRackBlock extends Block {
 	public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
 
 	@Override
-	public abstract ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+	public abstract ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult hit);
 
 	@Override
-	public abstract void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState,
+	public abstract void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState,
 			boolean isMoving);
 
 	@Override
-	public abstract void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer,
+	public abstract void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer,
 			ItemStack stack);
 
 	@Override
-	public boolean hasComparatorInputOverride(BlockState state) {
+	public boolean hasAnalogOutputSignal(BlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
-		return Container.calcRedstoneFromInventory((IInventory) worldIn.getTileEntity(pos));
+	public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos) {
+		return Container.getRedstoneSignalFromContainer((IInventory) worldIn.getBlockEntity(pos));
 	}
 
 	private static VoxelShape getNorthSouthShape() {
-		return Stream.of(Block.makeCuboidShape(0, 0, 1, 3, 2, 15), Block.makeCuboidShape(13, 0, 1, 16, 2, 15),
-				Block.makeCuboidShape(1, 2, 5, 2, 16, 11), Block.makeCuboidShape(2, 2, 5, 14, 15, 11),
-				Block.makeCuboidShape(14, 2, 5, 15, 16, 11)).reduce((v1, v2) -> {
-					return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
+		return Stream.of(Block.box(0, 0, 1, 3, 2, 15), Block.box(13, 0, 1, 16, 2, 15),
+				Block.box(1, 2, 5, 2, 16, 11), Block.box(2, 2, 5, 14, 15, 11),
+				Block.box(14, 2, 5, 15, 16, 11)).reduce((v1, v2) -> {
+					return VoxelShapes.join(v1, v2, IBooleanFunction.OR);
 				}).get();
 	}
 
 	private static VoxelShape getEastWestShape() {
-		return Stream.of(Block.makeCuboidShape(1, 0, 13, 15, 2, 16), Block.makeCuboidShape(1, 0, 0, 15, 2, 3),
-				Block.makeCuboidShape(5, 2, 14, 11, 16, 15), Block.makeCuboidShape(5, 2, 2, 11, 15, 14),
-				Block.makeCuboidShape(5, 2, 1, 11, 16, 2)).reduce((v1, v2) -> {
-					return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
+		return Stream.of(Block.box(1, 0, 13, 15, 2, 16), Block.box(1, 0, 0, 15, 2, 3),
+				Block.box(5, 2, 14, 11, 16, 15), Block.box(5, 2, 2, 11, 15, 14),
+				Block.box(5, 2, 1, 11, 16, 2)).reduce((v1, v2) -> {
+					return VoxelShapes.join(v1, v2, IBooleanFunction.OR);
 				}).get();
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		if (state.get(DIRECTION) == Direction.NORTH || state.get(DIRECTION) == Direction.SOUTH)
+		if (state.getValue(DIRECTION) == Direction.NORTH || state.getValue(DIRECTION) == Direction.SOUTH)
 			return getNorthSouthShape();
 		else
 			return getEastWestShape();
@@ -104,21 +106,21 @@ public abstract class AbstractSkiRackBlock extends Block {
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(DIRECTION, rot.rotate(state.get(DIRECTION)));
+		return state.setValue(DIRECTION, rot.rotate(state.getValue(DIRECTION)));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return rotate(state, mirrorIn.toRotation(state.get(DIRECTION)));
+		return rotate(state, mirrorIn.getRotation(state.getValue(DIRECTION)));
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(DIRECTION, context.getPlacementHorizontalFacing().getOpposite());
+		return this.defaultBlockState().setValue(DIRECTION, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(DIRECTION);
 	}
 }

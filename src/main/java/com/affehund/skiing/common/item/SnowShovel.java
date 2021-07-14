@@ -29,21 +29,21 @@ public class SnowShovel extends ToolItem {
 
 	public SnowShovel(IItemTier tier, float attackDamageIn, float attackSpeedIn, Item.Properties builderIn) {
 		super(attackDamageIn, attackSpeedIn, tier, effectiveBlocksOn,
-				builderIn.addToolType(ToolType.SHOVEL, tier.getHarvestLevel()));
+				builderIn.addToolType(ToolType.SHOVEL, tier.getLevel()));
 	}
 
-	public boolean canHarvestBlock(BlockState blockIn) {
-		return blockIn.isIn(Blocks.SNOW) || blockIn.isIn(Blocks.SNOW_BLOCK);
+	public boolean isCorrectToolForDrops(BlockState blockIn) {
+		return blockIn.is(Blocks.SNOW) || blockIn.is(Blocks.SNOW_BLOCK);
 	}
 
 	private static int radius = 1;
 
 	@Override
-	public boolean canPlayerBreakBlockWhileHolding(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+	public boolean canAttackBlock(BlockState state, World world, BlockPos pos, PlayerEntity player) {
 		if (player.isCrouching()) {
 			radius = 0;
 		}
-		if (player.getHeldItemMainhand().canHarvestBlock(world.getBlockState(pos))) {
+		if (player.getMainHandItem().isCorrectToolForDrops(world.getBlockState(pos))) {
 			SnowShovelUtils.breakBlocksInRadius(world, player, radius);
 		}
 		return true;
@@ -54,8 +54,8 @@ public class SnowShovel extends ToolItem {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(
-				TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "snow_shovel").mergeStyle(TextFormatting.GRAY));
+				TextUtils.addModTranslationToolTip(tooltip, ModConstants.MOD_ID, "snow_shovel").withStyle(TextFormatting.GRAY));
 	}
 }

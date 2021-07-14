@@ -27,7 +27,7 @@ public class SpruceSkiRackContainer extends AbstractSkiRackContainer {
 			final SpruceSkiRackTileEntity tileEntityIn) {
 		super(ModContainers.SPRUCE_SKI_RACK_CONTAINER.get(), windowId);
 		this.tileEntity = tileEntityIn;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntityIn.getWorld(), tileEntityIn.getPos());
+		this.canInteractWithCallable = IWorldPosCallable.create(tileEntityIn.getLevel(), tileEntityIn.getBlockPos());
 
 		// container slots
 		int index = 0;
@@ -50,7 +50,7 @@ public class SpruceSkiRackContainer extends AbstractSkiRackContainer {
 	private static SpruceSkiRackTileEntity getTileEntity(final PlayerInventory playerInv, final PacketBuffer data) {
 		Objects.requireNonNull(playerInv, "playerInv cannot be null");
 		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInv.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInv.player.level.getBlockEntity(data.readBlockPos());
 		if (tileAtPos instanceof SpruceSkiRackTileEntity) {
 			return (SpruceSkiRackTileEntity) tileAtPos;
 		}
@@ -58,8 +58,8 @@ public class SpruceSkiRackContainer extends AbstractSkiRackContainer {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(canInteractWithCallable, playerIn, ModBlocks.SPRUCE_SKI_RACK_BLOCK.get());
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(canInteractWithCallable, playerIn, ModBlocks.SPRUCE_SKI_RACK_BLOCK.get());
 	}
 
 }

@@ -19,28 +19,28 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class SnowboardItemISTER extends ItemStackTileEntityRenderer {
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType transformType, MatrixStack matrixStack,
+	public void renderByItem(ItemStack stack, TransformType transformType, MatrixStack matrixStack,
 			IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 		if (stack.getItem() instanceof SnowboardItem) {
-			matrixStack.push();
+			matrixStack.pushPose();
 			matrixStack.translate(0.5, 0, 0.5);
 			if (transformType == ItemCameraTransforms.TransformType.GUI) {
-				matrixStack.rotate(Vector3f.YP.rotationDegrees(180));
+				matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
 			}
 
 			if (transformType == ItemCameraTransforms.TransformType.FIXED) {
-				matrixStack.rotate(Vector3f.XN.rotationDegrees(180));
+				matrixStack.mulPose(Vector3f.XN.rotationDegrees(180));
 			}
 
 			Minecraft mc = Minecraft.getInstance();
-			SnowboardEntity snowboard = new SnowboardEntity(ModEntities.SNOWBOARD_ENTITY.get(), mc.world);
-			EntityRenderer<? super SnowboardEntity> render = mc.getRenderManager().getRenderer(snowboard);
-			if (mc.world != null) {
-				snowboard.setWorld(mc.world);
+			SnowboardEntity snowboard = new SnowboardEntity(ModEntities.SNOWBOARD_ENTITY.get(), mc.level);
+			EntityRenderer<? super SnowboardEntity> render = mc.getEntityRenderDispatcher().getRenderer(snowboard);
+			if (mc.level != null) {
+				snowboard.setLevel(mc.level);
 			}
 			snowboard.setSnowboardType(SnowboardItem.getSnowboardType(stack));
-			render.render(snowboard, 0, mc.getRenderPartialTicks(), matrixStack, buffer, combinedLight);
-			matrixStack.pop();
+			render.render(snowboard, 0, mc.getFrameTime(), matrixStack, buffer, combinedLight);
+			matrixStack.popPose();
 		}
 	}
 }

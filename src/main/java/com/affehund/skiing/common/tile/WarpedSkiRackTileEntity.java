@@ -31,7 +31,7 @@ public class WarpedSkiRackTileEntity extends AbstractSkiRackTileEntity {
 
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(ModBlocks.WARPED_SKI_RACK_BLOCK.get().getTranslationKey());
+		return new TranslationTextComponent(ModBlocks.WARPED_SKI_RACK_BLOCK.get().getDescriptionId());
 	}
 
 }

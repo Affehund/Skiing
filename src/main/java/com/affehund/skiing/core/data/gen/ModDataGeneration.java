@@ -89,34 +89,34 @@ public class ModDataGeneration {
 				add(ModItems.SKI_STICK_ITEM.get(), "Skistock");
 				add(ModItems.SKIS_ITEM.get(), "Skier");
 				add(ModItems.SNOWBOARD_ITEM.get(), "Snowboard");
-				add(ModItemGroup.MOD_ITEM_GROUP.getGroupName().getString(), "Skiing");
+				add(ModItemGroup.MOD_ITEM_GROUP.getDisplayName().getString(), "Skiing");
 				add(ModEntities.SKI_ENTITY.get(), "Skier");
 				add(ModEntities.SNOWBOARD_ENTITY.get(), "Snowboard");
 				add(ModItems.CHOCOLATE_CUP.get(), "Kakao Tasse");
 				add(ModItems.SNOW_SHOVEL.get(), "Schnee Schaufel");
 				add(ModItems.PULLOVER.get(), "Pullover");
 
-				add(ModBlocks.ACACIA_SKI_RACK_BLOCK.get(), "Akazienholz-Skiständer");
-				add(ModBlocks.BIRCH_SKI_RACK_BLOCK.get(), "Birkenholz-Skiständer");
-				add(ModBlocks.CRIMSON_SKI_RACK_BLOCK.get(), "Karmesinholz-Skiständer");
-				add(ModBlocks.DARK_OAK_SKI_RACK_BLOCK.get(), "Schwarzeichenholz-Skiständer");
-				add(ModBlocks.JUNGLE_SKI_RACK_BLOCK.get(), "Tropenholz-Skiständer");
-				add(ModBlocks.OAK_SKI_RACK_BLOCK.get(), "Eichen-Skiständer");
-				add(ModBlocks.SPRUCE_SKI_RACK_BLOCK.get(), "Fichten-Skiständer");
-				add(ModBlocks.WARPED_SKI_RACK_BLOCK.get(), "Wirrholz-Skiständer");
+				add(ModBlocks.ACACIA_SKI_RACK_BLOCK.get(), "Akazienholz-Skistï¿½nder");
+				add(ModBlocks.BIRCH_SKI_RACK_BLOCK.get(), "Birkenholz-Skistï¿½nder");
+				add(ModBlocks.CRIMSON_SKI_RACK_BLOCK.get(), "Karmesinholz-Skistï¿½nder");
+				add(ModBlocks.DARK_OAK_SKI_RACK_BLOCK.get(), "Schwarzeichenholz-Skistï¿½nder");
+				add(ModBlocks.JUNGLE_SKI_RACK_BLOCK.get(), "Tropenholz-Skistï¿½nder");
+				add(ModBlocks.OAK_SKI_RACK_BLOCK.get(), "Eichen-Skistï¿½nder");
+				add(ModBlocks.SPRUCE_SKI_RACK_BLOCK.get(), "Fichten-Skistï¿½nder");
+				add(ModBlocks.WARPED_SKI_RACK_BLOCK.get(), "Wirrholz-Skistï¿½nder");
 
 				addToolTip(modID, "snow_shovel",
-						"Mit diesem Gegenstand kannst du eine 3x3-Fläche aus Schnee auf einmal abbauen.");
+						"Mit diesem Gegenstand kannst du eine 3x3-Flï¿½che aus Schnee auf einmal abbauen.");
 				addToolTip(modID, "type", "Typ");
 
-				addVillager(modID, ModVillagers.SKIS_MERCHANT.get(), "Ski Händler");
+				addVillager(modID, ModVillagers.SKIS_MERCHANT.get(), "Ski Hï¿½ndler");
 				break;
 			case "en_us":
 				add("_comment", "Translation (en_us) by Affehund");
 				add(ModItems.SKI_STICK_ITEM.get(), "Ski Stick");
 				add(ModItems.SKIS_ITEM.get(), "Skis");
 				add(ModItems.SNOWBOARD_ITEM.get(), "Snowboard");
-				add(ModItemGroup.MOD_ITEM_GROUP.getGroupName().getString(), "Skiing");
+				add(ModItemGroup.MOD_ITEM_GROUP.getDisplayName().getString(), "Skiing");
 				add(ModEntities.SKI_ENTITY.get(), "Skis");
 				add(ModEntities.SNOWBOARD_ENTITY.get(), "Snowboard");
 				add(ModItems.CHOCOLATE_CUP.get(), "Chocolate Cup");
@@ -215,7 +215,7 @@ public class ModDataGeneration {
 		}
 
 		@Override
-		protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+		protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 			for (SkisEntity.SkisType type : SkisEntity.SkisType.values()) {
 				addSkisRecipe(consumer, type);
 			}
@@ -252,28 +252,28 @@ public class ModDataGeneration {
 			addPulloverRecipe(consumer, Items.WHITE_WOOL, ModItems.PULLOVER.get(), DyeColor.WHITE);
 			addPulloverRecipe(consumer, Items.YELLOW_WOOL, ModItems.PULLOVER.get(), DyeColor.YELLOW);
 
-			ShapelessRecipeBuilder.shapelessRecipe(ModItems.CHOCOLATE_CUP.get()).addIngredient(Items.MILK_BUCKET)
-					.addCriterion("has_milk", hasItem(Items.MILK_BUCKET)).addIngredient(Items.BUCKET)
-					.addCriterion("has_bucket", hasItem(Items.BUCKET)).addIngredient(Items.COCOA_BEANS)
-					.addCriterion("has_cocoa", hasItem(Items.COCOA_BEANS)).addIngredient(Items.COCOA_BEANS)
-					.build(consumer);
+			ShapelessRecipeBuilder.shapeless(ModItems.CHOCOLATE_CUP.get()).requires(Items.MILK_BUCKET)
+					.unlockedBy("has_milk", has(Items.MILK_BUCKET)).requires(Items.BUCKET)
+					.unlockedBy("has_bucket", has(Items.BUCKET)).requires(Items.COCOA_BEANS)
+					.unlockedBy("has_cocoa", has(Items.COCOA_BEANS)).requires(Items.COCOA_BEANS)
+					.save(consumer);
 
-			ShapedRecipeBuilder.shapedRecipe(ModItems.SNOW_SHOVEL.get()).patternLine(" b ").patternLine(" s ")
-					.patternLine(" s ").key('b', Items.BUCKET).addCriterion("has_bucket", hasItem(Items.BUCKET))
-					.key('s', Items.STICK).addCriterion("has_stick", hasItem(Items.STICK)).build(consumer);
+			ShapedRecipeBuilder.shaped(ModItems.SNOW_SHOVEL.get()).pattern(" b ").pattern(" s ")
+					.pattern(" s ").define('b', Items.BUCKET).unlockedBy("has_bucket", has(Items.BUCKET))
+					.define('s', Items.STICK).unlockedBy("has_stick", has(Items.STICK)).save(consumer);
 
-			ShapedRecipeBuilder.shapedRecipe(ModItems.SKI_STICK_ITEM.get()).patternLine(" s ").patternLine(" s ")
-					.patternLine(" n ").key('s', Items.STICK).addCriterion("has_stick", hasItem(Items.STICK))
-					.key('n', Items.IRON_NUGGET).addCriterion("has_nugget", hasItem(Items.IRON_NUGGET)).build(consumer);
+			ShapedRecipeBuilder.shaped(ModItems.SKI_STICK_ITEM.get()).pattern(" s ").pattern(" s ")
+					.pattern(" n ").define('s', Items.STICK).unlockedBy("has_stick", has(Items.STICK))
+					.define('n', Items.IRON_NUGGET).unlockedBy("has_nugget", has(Items.IRON_NUGGET)).save(consumer);
 		}
 
 		protected void addSkiRackRecipe(Consumer<IFinishedRecipe> consumer, Block rack, Block plank, Block slab) {
 			String folder = "ski_racks/";
-			ShapedRecipeBuilder.shapedRecipe(rack).patternLine("p p").patternLine("pcp").patternLine("sss")
-					.key('p', plank).addCriterion("has_plank", hasItem(plank)).key('c', Tags.Items.CHESTS_WOODEN)
-					.addCriterion("has_chest", hasItem(Tags.Items.CHESTS_WOODEN)).key('s', slab)
-					.addCriterion("has_slab", hasItem(slab))
-					.build(consumer, SkiingMod.modResourceLocation(folder + rack.asItem().toString()));
+			ShapedRecipeBuilder.shaped(rack).pattern("p p").pattern("pcp").pattern("sss")
+					.define('p', plank).unlockedBy("has_plank", has(plank)).define('c', Tags.Items.CHESTS_WOODEN)
+					.unlockedBy("has_chest", has(Tags.Items.CHESTS_WOODEN)).define('s', slab)
+					.unlockedBy("has_slab", has(slab))
+					.save(consumer, SkiingMod.modResourceLocation(folder + rack.asItem().toString()));
 		}
 
 		protected void addSkisRecipe(Consumer<IFinishedRecipe> consumer, SkisEntity.SkisType type) {
@@ -283,9 +283,9 @@ public class ModDataGeneration {
 			String name = type.getName();
 			CompoundNBT customNbt = new CompoundNBT();
 			customNbt.putString("Type", name);
-			ShapedRecipeBuilder.shapedRecipe(result).patternLine("p  ").patternLine(" p ").patternLine("  p")
-					.key('p', plank).addCriterion("has_plank", hasItem(plank))
-					.build(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.CRAFTING_SHAPED, customNbt),
+			ShapedRecipeBuilder.shaped(result).pattern("p  ").pattern(" p ").pattern("  p")
+					.define('p', plank).unlockedBy("has_plank", has(plank))
+					.save(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.SHAPED_RECIPE, customNbt),
 							SkiingMod.modResourceLocation(folder + result.toString() + "_from_" + type.toString()));
 		}
 
@@ -297,9 +297,9 @@ public class ModDataGeneration {
 			String name = type.getName();
 			CompoundNBT customNbt = new CompoundNBT();
 			customNbt.putString("Type", name);
-			ShapedRecipeBuilder.shapedRecipe(result).patternLine("sps").key('p', plank).key('s', slab)
-					.addCriterion("has_slab", hasItem(plank)).addCriterion("has_plank", hasItem(plank))
-					.build(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.CRAFTING_SHAPED, customNbt),
+			ShapedRecipeBuilder.shaped(result).pattern("sps").define('p', plank).define('s', slab)
+					.unlockedBy("has_slab", has(plank)).unlockedBy("has_plank", has(plank))
+					.save(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.SHAPED_RECIPE, customNbt),
 							SkiingMod.modResourceLocation(folder + result.toString() + "_from_" + type.toString()));
 		}
 
@@ -310,10 +310,10 @@ public class ModDataGeneration {
 			subNbt.putInt("color", color.getFireworkColor());
 			CompoundNBT customNbt = new CompoundNBT();
 			customNbt.put("display", subNbt);
-			ShapedRecipeBuilder.shapedRecipe(result).patternLine("w w").patternLine("wgw").patternLine("www")
-					.key('w', input).key('g', Ingredient.fromItems(Items.LIME_DYE, Items.GREEN_DYE))
-					.addCriterion("has_item", hasItem(input))
-					.build(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.CRAFTING_SHAPED, customNbt),
+			ShapedRecipeBuilder.shaped(result).pattern("w w").pattern("wgw").pattern("www")
+					.define('w', input).define('g', Ingredient.of(Items.LIME_DYE, Items.GREEN_DYE))
+					.unlockedBy("has_item", has(input))
+					.save(NBTResultFinishedRecipeAdapter.from(consumer, IRecipeSerializer.SHAPED_RECIPE, customNbt),
 							SkiingMod.modResourceLocation(
 									folder + result.asItem().toString() + "_from_" + input.asItem().toString()));
 		}
@@ -351,31 +351,31 @@ public class ModDataGeneration {
 			}
 
 			@Override
-			public void serialize(final JsonObject json) {
-				this.recipe.serialize(json);
+			public void serializeRecipeData(final JsonObject json) {
+				this.recipe.serializeRecipeData(json);
 				if (null != this.data) {
-					JSONUtils.getJsonObject(json, "result").addProperty("nbt", this.data.toString());
+					JSONUtils.getAsJsonObject(json, "result").addProperty("nbt", this.data.toString());
 				}
 			}
 
 			@Override
-			public ResourceLocation getID() {
-				return this.recipe.getID();
+			public ResourceLocation getId() {
+				return this.recipe.getId();
 			}
 
 			@Override
-			public IRecipeSerializer<?> getSerializer() {
+			public IRecipeSerializer<?> getType() {
 				return this.serializer;
 			}
 
 			@Override
-			public JsonObject getAdvancementJson() {
-				return this.recipe.getAdvancementJson();
+			public JsonObject serializeAdvancement() {
+				return this.recipe.serializeAdvancement();
 			}
 
 			@Override
-			public ResourceLocation getAdvancementID() {
-				return this.recipe.getAdvancementID();
+			public ResourceLocation getAdvancementId() {
+				return this.recipe.getAdvancementId();
 			}
 		}
 	}
@@ -387,8 +387,8 @@ public class ModDataGeneration {
 		}
 
 		@Override
-		protected void registerTags() {
-			getOrCreateBuilder(ModTags.Blocks.SNOWY_BLOCKS).add(Blocks.BLUE_ICE, Blocks.FROSTED_ICE, Blocks.ICE,
+		protected void addTags() {
+			tag(ModTags.Blocks.SNOWY_BLOCKS).add(Blocks.BLUE_ICE, Blocks.FROSTED_ICE, Blocks.ICE,
 					Blocks.PACKED_ICE, Blocks.SNOW, Blocks.SNOW_BLOCK);
 		}
 	}
@@ -401,8 +401,8 @@ public class ModDataGeneration {
 		}
 
 		@Override
-		protected void registerTags() {
-			getOrCreateBuilder(ModTags.Items.WOOL).add(Items.BLACK_WOOL).add(Items.BLUE_WOOL).add(Items.BROWN_WOOL)
+		protected void addTags() {
+			tag(ModTags.Items.WOOL).add(Items.BLACK_WOOL).add(Items.BLUE_WOOL).add(Items.BROWN_WOOL)
 					.add(Items.CYAN_WOOL).add(Items.GRAY_WOOL).add(Items.GREEN_WOOL).add(Items.LIGHT_BLUE_WOOL)
 					.add(Items.LIGHT_GRAY_WOOL).add(Items.LIME_WOOL).add(Items.MAGENTA_WOOL).add(Items.ORANGE_WOOL)
 					.add(Items.PINK_WOOL).add(Items.PURPLE_WOOL).add(Items.RED_WOOL).add(Items.WHITE_WOOL)
@@ -437,34 +437,34 @@ public class ModDataGeneration {
 		private final DataGenerator generator;
 
 		protected LootTable.Builder createStandardTable(String name, Block block) {
-			LootPool.Builder builder = LootPool.builder().name(name).rolls(ConstantRange.of(1))
-					.addEntry(ItemLootEntry.builder(block)
-							.acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY))
-							.acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY).addOperation("inv",
+			LootPool.Builder builder = LootPool.lootPool().name(name).setRolls(ConstantRange.exactly(1))
+					.add(ItemLootEntry.lootTableItem(block)
+							.apply(CopyName.copyName(CopyName.Source.BLOCK_ENTITY))
+							.apply(CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY).copy("inv",
 									"BlockEntityTag.inv", CopyNbt.Action.REPLACE))
-							.acceptFunction(SetContents.builderIn().addLootEntry(
-									DynamicLootEntry.func_216162_a(new ResourceLocation("minecraft", "contents")))));
-			return LootTable.builder().addLootPool(builder);
+							.apply(SetContents.setContents().withEntry(
+									DynamicLootEntry.dynamicEntry(new ResourceLocation("minecraft", "contents")))));
+			return LootTable.lootTable().withPool(builder);
 		}
 
 		protected LootTable.Builder createStandardTable(String name, Item item) {
-			LootPool.Builder builder = LootPool.builder().name(name).rolls(ConstantRange.of(1))
-					.addEntry(ItemLootEntry.builder(item).acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY))
-							.acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY).addOperation("inv",
+			LootPool.Builder builder = LootPool.lootPool().name(name).setRolls(ConstantRange.exactly(1))
+					.add(ItemLootEntry.lootTableItem(item).apply(CopyName.copyName(CopyName.Source.BLOCK_ENTITY))
+							.apply(CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY).copy("inv",
 									"BlockEntityTag.inv", CopyNbt.Action.REPLACE))
-							.acceptFunction(SetContents.builderIn().addLootEntry(
-									DynamicLootEntry.func_216162_a(new ResourceLocation("minecraft", "contents")))));
-			return LootTable.builder().addLootPool(builder);
+							.apply(SetContents.setContents().withEntry(
+									DynamicLootEntry.dynamicEntry(new ResourceLocation("minecraft", "contents")))));
+			return LootTable.lootTable().withPool(builder);
 		}
 
 		@Override
-		public void act(DirectoryCache cache) {
+		public void run(DirectoryCache cache) {
 			addTables();
 
 			Map<ResourceLocation, LootTable> tables = new HashMap<>();
 			for (Map.Entry<Block, LootTable.Builder> entry : lootTables.entrySet()) {
 				tables.put(entry.getKey().getLootTable(),
-						entry.getValue().setParameterSet(LootParameterSets.BLOCK).build());
+						entry.getValue().setParamSet(LootParameterSets.BLOCK).build());
 			}
 			writeTables(cache, tables);
 		}
@@ -475,7 +475,7 @@ public class ModDataGeneration {
 				Path path = outputFolder
 						.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
 				try {
-					IDataProvider.save(GSON, cache, LootTableManager.toJson(lootTable), path);
+					IDataProvider.save(GSON, cache, LootTableManager.serialize(lootTable), path);
 					SkiingMod.LOGGER.debug("Creating loot table for " + key.getPath());
 				} catch (IOException e) {
 					SkiingMod.LOGGER.error("Couldn't write loot table {}", path, e);

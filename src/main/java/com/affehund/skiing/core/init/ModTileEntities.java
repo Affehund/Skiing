@@ -21,33 +21,33 @@ public class ModTileEntities {
 
 	public static final RegistryObject<TileEntityType<AcaciaSkiRackTileEntity>> ACACIA_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("acacia_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(AcaciaSkiRackTileEntity::new, ModBlocks.ACACIA_SKI_RACK_BLOCK.get()).build(null));
+					.of(AcaciaSkiRackTileEntity::new, ModBlocks.ACACIA_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<BirchSkiRackTileEntity>> BIRCH_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("birch_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(BirchSkiRackTileEntity::new, ModBlocks.BIRCH_SKI_RACK_BLOCK.get()).build(null));
+					.of(BirchSkiRackTileEntity::new, ModBlocks.BIRCH_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<CrimsonSkiRackTileEntity>> CRIMSON_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("crimson_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(CrimsonSkiRackTileEntity::new, ModBlocks.CRIMSON_SKI_RACK_BLOCK.get()).build(null));
+					.of(CrimsonSkiRackTileEntity::new, ModBlocks.CRIMSON_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<DarkOakSkiRackTileEntity>> DARK_OAK_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("dark_oak_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(DarkOakSkiRackTileEntity::new, ModBlocks.DARK_OAK_SKI_RACK_BLOCK.get()).build(null));
+					.of(DarkOakSkiRackTileEntity::new, ModBlocks.DARK_OAK_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<JungleSkiRackTileEntity>> JUNGLE_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("jungle_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(JungleSkiRackTileEntity::new, ModBlocks.JUNGLE_SKI_RACK_BLOCK.get()).build(null));
+					.of(JungleSkiRackTileEntity::new, ModBlocks.JUNGLE_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<OakSkiRackTileEntity>> OAK_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("oak_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(OakSkiRackTileEntity::new, ModBlocks.OAK_SKI_RACK_BLOCK.get()).build(null));
+					.of(OakSkiRackTileEntity::new, ModBlocks.OAK_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<SpruceSkiRackTileEntity>> SPRUCE_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("spruce_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(SpruceSkiRackTileEntity::new, ModBlocks.SPRUCE_SKI_RACK_BLOCK.get()).build(null));
+					.of(SpruceSkiRackTileEntity::new, ModBlocks.SPRUCE_SKI_RACK_BLOCK.get()).build(null));
 
 	public static final RegistryObject<TileEntityType<WarpedSkiRackTileEntity>> WARPED_SKI_RACK_TILE_ENTITY = TILE_ENTITIES
 			.register("warped_" + ModConstants.RegistryStrings.SKI_RACK, () -> TileEntityType.Builder
-					.create(WarpedSkiRackTileEntity::new, ModBlocks.WARPED_SKI_RACK_BLOCK.get()).build(null));
+					.of(WarpedSkiRackTileEntity::new, ModBlocks.WARPED_SKI_RACK_BLOCK.get()).build(null));
 }

@@ -31,7 +31,7 @@ public class AcaciaSkiRackTileEntity extends AbstractSkiRackTileEntity {
 
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(ModBlocks.ACACIA_SKI_RACK_BLOCK.get().getTranslationKey());
+		return new TranslationTextComponent(ModBlocks.ACACIA_SKI_RACK_BLOCK.get().getDescriptionId());
 	}
 
 }

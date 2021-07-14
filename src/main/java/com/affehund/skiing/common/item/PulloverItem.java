@@ -17,6 +17,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.item.Item.Properties;
+
 public class PulloverItem extends ArmorItem implements IDyeableArmorItem {
 
 	public static final int DEFAULT_COLOR = 0xFFFFFF;
@@ -40,8 +42,8 @@ public class PulloverItem extends ArmorItem implements IDyeableArmorItem {
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-		if (isInGroup(group)) {
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+		if (allowdedIn(group)) {
 			for (DyeColor color : DyeColor.values()) {
 				ItemStack stack = new ItemStack(this);
 				setColor(stack, color.getFireworkColor());
@@ -52,7 +54,7 @@ public class PulloverItem extends ArmorItem implements IDyeableArmorItem {
 
 	@Override
 	public int getColor(ItemStack stack) {
-		CompoundNBT nbt = stack.getChildTag("display");
+		CompoundNBT nbt = stack.getTagElement("display");
 		return nbt != null && nbt.contains("color", 99) ? nbt.getInt("color") : DEFAULT_COLOR;
 	}
 }

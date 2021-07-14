@@ -26,20 +26,20 @@ public class DrinkableItem extends Item {
 	 * Called when the player finishes using this Item (E.g. finishes eating.). Not
 	 * called when the player stops using the Item before the action is complete.
 	 */
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		ItemStack itemStack = super.onItemUseFinish(stack, worldIn, entityLiving);
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+		ItemStack itemStack = super.finishUsingItem(stack, worldIn, entityLiving);
 
-		if (cureEffects && !worldIn.isRemote) {
-			entityLiving.clearActivePotions();
+		if (cureEffects && !worldIn.isClientSide) {
+			entityLiving.removeAllEffects();
 		}
 
 		if (addConsumeTrigger && entityLiving instanceof ServerPlayerEntity) {
 			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entityLiving;
 			CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayerEntity, itemStack);
-			serverPlayerEntity.addStat(Stats.ITEM_USED.get(this));
+			serverPlayerEntity.awardStat(Stats.ITEM_USED.get(this));
 		}
 
-		return entityLiving instanceof PlayerEntity && ((PlayerEntity) entityLiving).abilities.isCreativeMode
+		return entityLiving instanceof PlayerEntity && ((PlayerEntity) entityLiving).abilities.instabuild
 				? itemStack
 				: new ItemStack(returnItem);
 

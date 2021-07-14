@@ -140,14 +140,14 @@ public class SkiingMod {
 		LOGGER.info("Client setup!");
 		RenderingRegistry.registerEntityRenderingHandler(ModEntities.SKI_ENTITY.get(), SkisRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ModEntities.SNOWBOARD_ENTITY.get(), SnowboardRenderer::new);
-		ScreenManager.registerFactory(ModContainers.ACACIA_SKI_RACK_CONTAINER.get(), AcaciaSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.BIRCH_SKI_RACK_CONTAINER.get(), BirchSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.CRIMSON_SKI_RACK_CONTAINER.get(), CrimsonSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.DARK_OAK_SKI_RACK_CONTAINER.get(), DarkOakSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.JUNGLE_SKI_RACK_CONTAINER.get(), JungleSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.OAK_SKI_RACK_CONTAINER.get(), OakSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.SPRUCE_SKI_RACK_CONTAINER.get(), SpruceSkiRackScreen::new);
-		ScreenManager.registerFactory(ModContainers.WARPED_SKI_RACK_CONTAINER.get(), WarpedSkiRackScreen::new);
+		ScreenManager.register(ModContainers.ACACIA_SKI_RACK_CONTAINER.get(), AcaciaSkiRackScreen::new);
+		ScreenManager.register(ModContainers.BIRCH_SKI_RACK_CONTAINER.get(), BirchSkiRackScreen::new);
+		ScreenManager.register(ModContainers.CRIMSON_SKI_RACK_CONTAINER.get(), CrimsonSkiRackScreen::new);
+		ScreenManager.register(ModContainers.DARK_OAK_SKI_RACK_CONTAINER.get(), DarkOakSkiRackScreen::new);
+		ScreenManager.register(ModContainers.JUNGLE_SKI_RACK_CONTAINER.get(), JungleSkiRackScreen::new);
+		ScreenManager.register(ModContainers.OAK_SKI_RACK_CONTAINER.get(), OakSkiRackScreen::new);
+		ScreenManager.register(ModContainers.SPRUCE_SKI_RACK_CONTAINER.get(), SpruceSkiRackScreen::new);
+		ScreenManager.register(ModContainers.WARPED_SKI_RACK_CONTAINER.get(), WarpedSkiRackScreen::new);
 
 		ClientRegistry.bindTileEntityRenderer(ModTileEntities.ACACIA_SKI_RACK_TILE_ENTITY.get(),
 				AcaciaSkiRackTESR::new);
@@ -263,17 +263,17 @@ public class SkiingMod {
 	public void controllSkis(InputUpdateEvent event) {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player != null) {
-			Entity riddenEntity = mc.player.getRidingEntity();
+			Entity riddenEntity = mc.player.getVehicle();
 			MovementInput movementInput = event.getMovementInput();
 			if (riddenEntity instanceof SkisEntity) {
-				((SkisEntity) riddenEntity).updateInputs(movementInput.leftKeyDown, movementInput.rightKeyDown,
-						movementInput.forwardKeyDown, movementInput.backKeyDown,
-						mc.gameSettings.keyBindSprint.isKeyDown(), movementInput.jump);
+				((SkisEntity) riddenEntity).updateInputs(movementInput.left, movementInput.right,
+						movementInput.up, movementInput.down,
+						mc.options.keySprint.isDown(), movementInput.jumping);
 			}
 			if (riddenEntity instanceof SnowboardEntity) {
-				((SnowboardEntity) riddenEntity).updateInputs(movementInput.leftKeyDown, movementInput.rightKeyDown,
-						movementInput.forwardKeyDown, movementInput.backKeyDown,
-						mc.gameSettings.keyBindSprint.isKeyDown(), movementInput.jump);
+				((SnowboardEntity) riddenEntity).updateInputs(movementInput.left, movementInput.right,
+						movementInput.up, movementInput.down,
+						mc.options.keySprint.isDown(), movementInput.jumping);
 			}
 		}
 	}
@@ -286,41 +286,41 @@ public class SkiingMod {
 		if (player == null) {
 			return;
 		}
-		World world = player.world;
-		ItemStack tool = player.getHeldItemMainhand();
+		World world = player.level;
+		ItemStack tool = player.getMainHandItem();
 		if (!tool.isEmpty()) {
 			if (tool.getItem() instanceof SnowShovel) {
 				int radius = SnowShovel.getRadius();
-				ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
+				ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
 				Iterable<BlockPos> extraBlocks = SnowShovelUtils.getBlocksToBreak(world, player, radius);
 
-				BlockPos lookingAtPos = SnowShovelUtils.getLookingAtBlockRayTrace(world, player).getPos();
+				BlockPos lookingAtPos = SnowShovelUtils.getLookingAtBlockRayTrace(world, player).getBlockPos();
 
 				WorldRenderer worldRender = event.getContext();
 				MatrixStack matrix = event.getMatrix();
-				IVertexBuilder vertexBuilder = worldRender.renderTypeTextures.getBufferSource()
-						.getBuffer(RenderType.getLines());
-				Entity viewEntity = renderInfo.getRenderViewEntity();
+				IVertexBuilder vertexBuilder = worldRender.renderBuffers.bufferSource()
+						.getBuffer(RenderType.lines());
+				Entity viewEntity = renderInfo.getEntity();
 
-				Vector3d vector3d = renderInfo.getProjectedView();
-				double d0 = vector3d.getX();
-				double d1 = vector3d.getY();
-				double d2 = vector3d.getZ();
-				matrix.push();
+				Vector3d vector3d = renderInfo.getPosition();
+				double d0 = vector3d.x();
+				double d1 = vector3d.y();
+				double d2 = vector3d.z();
+				matrix.pushPose();
 
-				if (tool.canHarvestBlock(world.getBlockState(lookingAtPos))) {
+				if (tool.isCorrectToolForDrops(world.getBlockState(lookingAtPos))) {
 					for (BlockPos pos : extraBlocks) {
-						if (world.getWorldBorder().contains(pos)) {
+						if (world.getWorldBorder().isWithinBounds(pos)) {
 							BlockState state = world.getBlockState(pos);
-							if (tool.canHarvestBlock(state)) {
-								worldRender.drawSelectionBox(matrix, vertexBuilder, viewEntity, d0, d1, d2, pos,
+							if (tool.isCorrectToolForDrops(state)) {
+								worldRender.renderHitOutline(matrix, vertexBuilder, viewEntity, d0, d1, d2, pos,
 										world.getBlockState(pos));
 							}
 						}
 
 					}
 				}
-				matrix.pop();
+				matrix.popPose();
 			}
 		}
 	}
@@ -331,7 +331,7 @@ public class SkiingMod {
 
 		ModBlocks.BLOCKS.getEntries().stream().filter(block -> !(block.get() instanceof FlowingFluidBlock))
 				.map(RegistryObject::get).forEach(block -> {
-					final Item.Properties properties = new Item.Properties().group(ModItemGroup.MOD_ITEM_GROUP);
+					final Item.Properties properties = new Item.Properties().tab(ModItemGroup.MOD_ITEM_GROUP);
 					final BlockItem blockItem = new BlockItem(block, properties);
 					blockItem.setRegistryName(Objects.requireNonNull(block.getRegistryName()));
 					registry.register(blockItem);

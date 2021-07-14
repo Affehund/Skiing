@@ -33,28 +33,28 @@ public abstract class AbstractSkiRackContainer extends Container {
 	}
 
 	@Override
-	public abstract boolean canInteractWith(PlayerEntity playerIn);
+	public abstract boolean stillValid(PlayerEntity playerIn);
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		final int invSize = 4;
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			if (index < invSize) {
-				if (!this.mergeItemStack(itemstack1, invSize, this.inventorySlots.size(), true)) {
+				if (!this.moveItemStackTo(itemstack1, invSize, this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, invSize, false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, invSize, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 		}
 		return itemstack;

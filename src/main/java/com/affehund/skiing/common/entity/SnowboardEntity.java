@@ -45,16 +45,16 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class SnowboardEntity extends Entity {
 
 	// data
-	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(SnowboardEntity.class,
+	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.defineId(SnowboardEntity.class,
 			DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(SnowboardEntity.class,
+	private static final DataParameter<Boolean> FLYING = EntityDataManager.defineId(SnowboardEntity.class,
 			DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.createKey(SnowboardEntity.class,
-			DataSerializers.VARINT);
-	private static final DataParameter<Integer> SNOWBOARD_TYPE = EntityDataManager.createKey(SnowboardEntity.class,
-			DataSerializers.VARINT);
-	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(SnowboardEntity.class,
-			DataSerializers.VARINT);
+	private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.defineId(SnowboardEntity.class,
+			DataSerializers.INT);
+	private static final DataParameter<Integer> SNOWBOARD_TYPE = EntityDataManager.defineId(SnowboardEntity.class,
+			DataSerializers.INT);
+	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.defineId(SnowboardEntity.class,
+			DataSerializers.INT);
 
 	// private values
 	private float deltaRotation;
@@ -74,34 +74,34 @@ public class SnowboardEntity extends Entity {
 
 	public SnowboardEntity(EntityType<SnowboardEntity> entityType, World world) {
 		super(entityType, world);
-		this.stepHeight = 1.0F;
-		this.preventEntitySpawning = true;
+		this.maxUpStep = 1.0F;
+		this.blocksBuilding = true;
 	}
 
 	public SnowboardEntity(World world, double x, double y, double z) {
 		this(ModEntities.SNOWBOARD_ENTITY.get(), world);
-		this.setPosition(x, y, z);
-		this.setMotion(Vector3d.ZERO);
-		this.prevPosX = x;
-		this.prevPosY = y;
-		this.prevPosZ = z;
+		this.setPos(x, y, z);
+		this.setDeltaMovement(Vector3d.ZERO);
+		this.xo = x;
+		this.yo = y;
+		this.zo = z;
 	}
 
 	@Override
-	protected void registerData() {
-		this.dataManager.register(DAMAGE_TAKEN, 0.0F);
-		this.dataManager.register(FLYING, false);
-		this.dataManager.register(FORWARD_DIRECTION, 1);
-		this.dataManager.register(SNOWBOARD_TYPE, SnowboardEntity.SnowboardType.ACACIA.ordinal());
-		this.dataManager.register(TIME_SINCE_HIT, 0);
+	protected void defineSynchedData() {
+		this.entityData.define(DAMAGE_TAKEN, 0.0F);
+		this.entityData.define(FLYING, false);
+		this.entityData.define(FORWARD_DIRECTION, 1);
+		this.entityData.define(SNOWBOARD_TYPE, SnowboardEntity.SnowboardType.ACACIA.ordinal());
+		this.entityData.define(TIME_SINCE_HIT, 0);
 	}
 
 	@Override
-	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
 		if (player.isSecondaryUseActive()) {
 			return ActionResultType.PASS;
 		} else {
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide) {
 				return player.startRiding(this) ? ActionResultType.CONSUME : ActionResultType.PASS;
 			} else {
 				return ActionResultType.SUCCESS;
@@ -115,17 +115,17 @@ public class SnowboardEntity extends Entity {
 	}
 
 	@Override
-	public void updatePassenger(Entity passenger) {
-		if (this.isPassenger(passenger) || passenger instanceof PlayerEntity) {
+	public void positionRider(Entity passenger) {
+		if (this.hasPassenger(passenger) || passenger instanceof PlayerEntity) {
 			passenger.setPose(Pose.STANDING);
 			@SuppressWarnings("deprecation")
-			float f1 = (float) ((this.removed ? (double) 0.01F : this.getMountedYOffset()) + passenger.getYOffset());
+			float f1 = (float) ((this.removed ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
 
 			Vector3d vector3d = (new Vector3d(0.0D, 0.0D, 0.0D))
-					.rotateYaw(-this.rotationYaw * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-			passenger.setPosition(this.getPosX() + vector3d.x, this.getPosY() + f1, this.getPosZ() + vector3d.z);
-			passenger.rotationYaw += this.deltaRotation;
-			passenger.setRotationYawHead(passenger.getRotationYawHead() + this.deltaRotation);
+					.yRot(-this.yRot * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+			passenger.setPos(this.getX() + vector3d.x, this.getY() + f1, this.getZ() + vector3d.z);
+			passenger.yRot += this.deltaRotation;
+			passenger.setYHeadRot(passenger.getYHeadRot() + this.deltaRotation);
 			this.applyYawToEntity(passenger);
 		}
 	}
@@ -133,10 +133,10 @@ public class SnowboardEntity extends Entity {
 	@Override
 	protected void addPassenger(@Nonnull Entity passenger) {
 		super.addPassenger(passenger);
-		if (this.canPassengerSteer() && this.lerpSteps > 0) {
+		if (this.isControlledByLocalInstance() && this.lerpSteps > 0) {
 			this.lerpSteps = 0;
 			this.forwardInputDown = false;
-			this.setPositionAndRotation(this.lerpX, this.lerpY, this.lerpZ, (float) this.lerpYaw,
+			this.absMoveTo(this.lerpX, this.lerpY, this.lerpZ, (float) this.lerpYaw,
 					(float) this.lerpPitch);
 		}
 	}
@@ -149,7 +149,7 @@ public class SnowboardEntity extends Entity {
 		this.rightInputDown = false;
 		this.leftInputDown = false;
 		this.deltaRotation = 0;
-		this.dataManager.set(FLYING, false);
+		this.entityData.set(FLYING, false);
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class SnowboardEntity extends Entity {
 		this.updateStatus();
 
 		if (this.onGround) {
-			this.dataManager.set(FLYING, false);
+			this.entityData.set(FLYING, false);
 		}
 
 		if (this.getTimeSinceHit() > 0) {
@@ -169,18 +169,18 @@ public class SnowboardEntity extends Entity {
 		}
 
 		this.tickLerp();
-		if (this.canPassengerSteer()) {
+		if (this.isControlledByLocalInstance()) {
 			this.controlEntity();
 			this.updateMotion();
-			this.move(MoverType.SELF, this.getMotion());
+			this.move(MoverType.SELF, this.getDeltaMovement());
 		} else {
-			this.setMotion(Vector3d.ZERO);
+			this.setDeltaMovement(Vector3d.ZERO);
 		}
-		this.doBlockCollisions();
+		this.checkInsideBlocks();
 	}
 
 	private void controlEntity() {
-		if (this.isBeingRidden()) {
+		if (this.isVehicle()) {
 			float f = 0;
 			if (this.leftInputDown) {
 				--this.deltaRotation;
@@ -194,55 +194,55 @@ public class SnowboardEntity extends Entity {
 				f += 0.005F;
 			}
 
-			this.rotationYaw += this.deltaRotation;
+			this.yRot += this.deltaRotation;
 			if (this.forwardInputDown) {
-				f += this.boostDown && !this.dataManager.get(FLYING) && this.onGround ? 0.06f : 0.04f;
+				f += this.boostDown && !this.entityData.get(FLYING) && this.onGround ? 0.06f : 0.04f;
 				if (status == Status.ON_SNOW)
-					this.world.addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPosX() + this.rand.nextFloat(),
-							this.getPosY() + 0.5D, this.getPosZ() + this.rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+					this.level.addParticle(ParticleTypes.ITEM_SNOWBALL, this.getX() + this.random.nextFloat(),
+							this.getY() + 0.5D, this.getZ() + this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
 			}
 
 			if (this.backInputDown) {
 				f -= 0.005F;
 			}
 
-			if (this.flyDown && this.getMotion().mul(1, 0, 1).lengthSquared() > 0.4 * 0.4) {
-				this.setMotion(this.getMotion().add(0, 0.75, 0));
-				this.setMotion(this.getMotion().mul(0.8, 1, 0.8));
-				this.dataManager.set(FLYING, true);
+			if (this.flyDown && this.getDeltaMovement().multiply(1, 0, 1).lengthSqr() > 0.4 * 0.4) {
+				this.setDeltaMovement(this.getDeltaMovement().add(0, 0.75, 0));
+				this.setDeltaMovement(this.getDeltaMovement().multiply(0.8, 1, 0.8));
+				this.entityData.set(FLYING, true);
 			} else {
-				this.setMotion(this.getMotion().add(MathHelper.sin(-this.rotationYaw * ((float) Math.PI / 180)) * f, 0,
-						MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180)) * f));
+				this.setDeltaMovement(this.getDeltaMovement().add(MathHelper.sin(-this.yRot * ((float) Math.PI / 180)) * f, 0,
+						MathHelper.cos(this.yRot * ((float) Math.PI / 180)) * f));
 			}
 		}
 	}
 
 	private void tickLerp() {
-		if (this.canPassengerSteer()) {
+		if (this.isControlledByLocalInstance()) {
 			this.lerpSteps = 0;
-			this.setPacketCoordinates(this.getPosX(), this.getPosY(), this.getPosZ());
+			this.setPacketCoordinates(this.getX(), this.getY(), this.getZ());
 		}
 
 		if (this.lerpSteps > 0) {
-			double d0 = this.getPosX() + (this.lerpX - this.getPosX()) / this.lerpSteps;
-			double d1 = this.getPosY() + (this.lerpY - this.getPosY()) / this.lerpSteps;
-			double d2 = this.getPosZ() + (this.lerpZ - this.getPosZ()) / this.lerpSteps;
-			double d3 = MathHelper.wrapDegrees(this.lerpYaw - this.rotationYaw);
-			this.rotationYaw = (float) (this.rotationYaw + d3 / this.lerpSteps);
-			this.rotationPitch = (float) (this.rotationPitch + (this.lerpPitch - this.rotationPitch) / this.lerpSteps);
+			double d0 = this.getX() + (this.lerpX - this.getX()) / this.lerpSteps;
+			double d1 = this.getY() + (this.lerpY - this.getY()) / this.lerpSteps;
+			double d2 = this.getZ() + (this.lerpZ - this.getZ()) / this.lerpSteps;
+			double d3 = MathHelper.wrapDegrees(this.lerpYaw - this.yRot);
+			this.yRot = (float) (this.yRot + d3 / this.lerpSteps);
+			this.xRot = (float) (this.xRot + (this.lerpPitch - this.xRot) / this.lerpSteps);
 			--this.lerpSteps;
-			this.setPosition(d0, d1, d2);
-			this.setRotation(this.rotationYaw, this.rotationPitch);
+			this.setPos(d0, d1, d2);
+			this.setRot(this.yRot, this.xRot);
 		}
 	}
 
 	private void updateMotion() {
 		double momentum = 0.25D;
-		double falling = this.hasNoGravity() ? 0 : -0.02;
+		double falling = this.isNoGravity() ? 0 : -0.02;
 
 		switch (this.status) {
 		case IN_AIR:
-			momentum = this.dataManager.get(FLYING) ? SkiingConfig.COMMON_CONFIG.IN_AIR_FLYING_MOMENTUM.get()
+			momentum = this.entityData.get(FLYING) ? SkiingConfig.COMMON_CONFIG.IN_AIR_FLYING_MOMENTUM.get()
 					: SkiingConfig.COMMON_CONFIG.IN_AIR_MOMENTUM.get();
 			break;
 		case IN_WATER:
@@ -262,15 +262,15 @@ public class SnowboardEntity extends Entity {
 			break;
 		}
 
-		Vector3d motion = this.getMotion();
+		Vector3d motion = this.getDeltaMovement();
 		motion = motion.add(0, falling, 0);
-		if (this.dataManager.get(FLYING)) {
+		if (this.entityData.get(FLYING)) {
 			motion = new Vector3d(motion.x, Math.max(motion.y + falling, -0.03), motion.z);
 		} else {
 			motion = motion.add(0, falling, 0);
 		}
-		motion = motion.mul(momentum, 1, momentum);
-		this.setMotion(motion);
+		motion = motion.multiply(momentum, 1, momentum);
+		this.setDeltaMovement(motion);
 		this.deltaRotation *= momentum;
 	}
 
@@ -286,9 +286,9 @@ public class SnowboardEntity extends Entity {
 
 	@SuppressWarnings("deprecation")
 	private void updateStatus() {
-		BlockState blockState = this.world.getBlockState(this.getPosition());
+		BlockState blockState = this.level.getBlockState(this.blockPosition());
 		if (blockState.isAir()) {
-			blockState = this.world.getBlockState(this.getPositionUnderneath());
+			blockState = this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
 		}
 		if (this.isInWater()) {
 			this.status = Status.IN_WATER;
@@ -302,7 +302,7 @@ public class SnowboardEntity extends Entity {
 	}
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, @Nonnull BlockState state, @Nonnull BlockPos pos) {
+	protected void checkFallDamage(double y, boolean onGroundIn, @Nonnull BlockState state, @Nonnull BlockPos pos) {
 		if (!this.isPassenger()) {
 			if (onGroundIn) {
 				if (this.fallDistance > 3) {
@@ -310,10 +310,10 @@ public class SnowboardEntity extends Entity {
 						this.fallDistance = 0.0F;
 						return;
 					}
-					this.onLivingFall(this.fallDistance, 1.0F);
+					this.causeFallDamage(this.fallDistance, 1.0F);
 				}
 				this.fallDistance = 0.0F;
-			} else if (!this.world.getFluidState(this.getPosition().down()).isTagged(FluidTags.WATER) && y < 0.0D) {
+			} else if (!this.level.getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && y < 0.0D) {
 				this.fallDistance = (float) (this.fallDistance - y);
 			}
 		}
@@ -321,21 +321,21 @@ public class SnowboardEntity extends Entity {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		if (this.isInvulnerableTo(source)) {
 			return false;
-		} else if (!this.world.isRemote && !this.removed) {
+		} else if (!this.level.isClientSide && !this.removed) {
 			this.setForwardDirection(-this.getForwardDirection());
 			this.setTimeSinceHit(10);
 			this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
-			this.markVelocityChanged();
-			boolean isCreative = source.getTrueSource() instanceof PlayerEntity
-					&& ((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode;
+			this.markHurt();
+			boolean isCreative = source.getEntity() instanceof PlayerEntity
+					&& ((PlayerEntity) source.getEntity()).abilities.instabuild;
 			if (isCreative || this.getDamageTaken() > 40.0F) {
-				if (!isCreative && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+				if (!isCreative && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
 					ItemStack stack = new ItemStack(ModItems.SNOWBOARD_ITEM.get());
 					((SnowboardItem) stack.getItem()).setSnowboardType(stack, this.getSnowboardType().getName());
-					this.entityDropItem(stack);
+					this.spawnAtLocation(stack);
 				}
 				this.remove();
 			}
@@ -347,52 +347,52 @@ public class SnowboardEntity extends Entity {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void performHurtAnimation() {
+	public void animateHurt() {
 		this.setForwardDirection(-this.getForwardDirection());
 		this.setTimeSinceHit(10);
 		this.setDamageTaken(this.getDamageTaken() * 11.0F);
 	}
 
 	public float getDamageTaken() {
-		return this.dataManager.get(DAMAGE_TAKEN);
+		return this.entityData.get(DAMAGE_TAKEN);
 	}
 
 	protected void setDamageTaken(float damageTaken) {
-		this.dataManager.set(DAMAGE_TAKEN, damageTaken);
+		this.entityData.set(DAMAGE_TAKEN, damageTaken);
 	}
 
 	public int getForwardDirection() {
-		return this.dataManager.get(FORWARD_DIRECTION);
+		return this.entityData.get(FORWARD_DIRECTION);
 	}
 
 	private void setForwardDirection(int forward) {
-		this.dataManager.set(FORWARD_DIRECTION, forward);
+		this.entityData.set(FORWARD_DIRECTION, forward);
 	}
 
 	public int getTimeSinceHit() {
-		return this.dataManager.get(TIME_SINCE_HIT);
+		return this.entityData.get(TIME_SINCE_HIT);
 	}
 
 	private void setTimeSinceHit(int timeSinceHit) {
-		this.dataManager.set(TIME_SINCE_HIT, timeSinceHit);
+		this.entityData.set(TIME_SINCE_HIT, timeSinceHit);
 	}
 
 	public boolean isFlying() {
-		return this.dataManager.get(FLYING);
+		return this.entityData.get(FLYING);
 	}
 
 	public void setFlying(boolean flying) {
-		this.dataManager.set(FLYING, flying);
+		this.entityData.set(FLYING, flying);
 	}
 
 	public void setSnowboardType(SnowboardEntity.SnowboardType type) {
-		this.dataManager.set(SNOWBOARD_TYPE, type.ordinal());
+		this.entityData.set(SNOWBOARD_TYPE, type.ordinal());
 	}
 
 	@Nonnull
 	public SnowboardType getSnowboardType() {
 		SnowboardType[] types = SnowboardType.values();
-		int type = this.dataManager.get(SNOWBOARD_TYPE);
+		int type = this.entityData.get(SNOWBOARD_TYPE);
 		if (type < 0 || type >= types.length) {
 			return SnowboardType.ACACIA;
 		} else {
@@ -465,65 +465,65 @@ public class SnowboardEntity extends Entity {
 	}
 
 	@Override
-	public boolean canCollide(Entity entity) {
+	public boolean canCollideWith(Entity entity) {
 		return checkCollisionWithEntity(this, entity);
 	}
 
 	private static boolean checkCollisionWithEntity(Entity ridingEntity, Entity entity) {
-		return (entity.func_241845_aY() || entity.canBePushed()) && !ridingEntity.isRidingSameEntity(entity);
+		return (entity.canBeCollidedWith() || entity.isPushable()) && !ridingEntity.isPassengerOfSameVehicle(entity);
 	}
 
 	@Nonnull
 	@Override
-	protected Vector3d func_241839_a(@Nonnull Direction.Axis axis, @Nonnull TeleportationRepositioner.Result result) {
-		return LivingEntity.func_242288_h(super.func_241839_a(axis, result));
+	protected Vector3d getRelativePortalPosition(@Nonnull Direction.Axis axis, @Nonnull TeleportationRepositioner.Result result) {
+		return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, result));
 	}
 
 	@Override
-	public void applyEntityCollision(Entity entityIn) {
+	public void push(Entity entityIn) {
 		if (entityIn instanceof SnowboardEntity) {
 			if (entityIn.getBoundingBox().minY < this.getBoundingBox().maxY) {
-				super.applyEntityCollision(entityIn);
+				super.push(entityIn);
 			}
 		} else if (entityIn.getBoundingBox().minY <= this.getBoundingBox().minY) {
-			super.applyEntityCollision(entityIn);
+			super.push(entityIn);
 		}
 	}
 
 	@Override
-	public boolean func_241845_aY() {
+	public boolean canBeCollidedWith() {
 		return true;
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return true;
 	}
 
 	@Override
-	public double getMountedYOffset() {
+	public double getPassengersRidingOffset() {
 		return 0.45D;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean canBeCollidedWith() {
+	public boolean isPickable() {
 		return !this.removed;
 	}
 
 	@Nonnull
 	@Override
-	public Direction getAdjustedHorizontalFacing() {
-		return this.getHorizontalFacing().rotateY();
+	public Direction getMotionDirection() {
+		return this.getDirection().getClockWise();
 	}
 
 	private void applyYawToEntity(Entity entityToUpdate) {
-		entityToUpdate.setRenderYawOffset(this.rotationYaw);
-		float f = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - this.rotationYaw);
+		entityToUpdate.setYBodyRot(this.yRot);
+		float f = MathHelper.wrapDegrees(entityToUpdate.yRot - this.yRot);
 		float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
-		entityToUpdate.prevRotationYaw += f1 - f;
-		entityToUpdate.rotationYaw += f1 - f;
-		entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
+		entityToUpdate.yRotO += f1 - f;
+		entityToUpdate.yRot += f1 - f;
+		entityToUpdate.setYHeadRot(entityToUpdate.yRot);
 	}
 
 	@Override
@@ -533,7 +533,7 @@ public class SnowboardEntity extends Entity {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch,
+	public void lerpTo(double x, double y, double z, float yaw, float pitch,
 			int posRotationIncrements, boolean teleport) {
 		this.lerpX = x;
 		this.lerpY = y;
@@ -544,17 +544,17 @@ public class SnowboardEntity extends Entity {
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
-	protected void writeAdditional(CompoundNBT nbt) {
+	protected void addAdditionalSaveData(CompoundNBT nbt) {
 		nbt.putString("Type", this.getSnowboardType().name());
 	}
 
 	@Override
-	protected void readAdditional(CompoundNBT nbt) {
+	protected void readAdditionalSaveData(CompoundNBT nbt) {
 		if (nbt.contains("Type", Constants.NBT.TAG_STRING)) {
 			this.setSnowboardType(SnowboardType.valueOf(nbt.getString("Type")));
 		}

@@ -31,7 +31,7 @@ public class BirchSkiRackTileEntity extends AbstractSkiRackTileEntity {
 
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(ModBlocks.BIRCH_SKI_RACK_BLOCK.get().getTranslationKey());
+		return new TranslationTextComponent(ModBlocks.BIRCH_SKI_RACK_BLOCK.get().getDescriptionId());
 	}
 
 }

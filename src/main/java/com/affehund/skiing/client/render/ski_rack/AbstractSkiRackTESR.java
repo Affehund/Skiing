@@ -32,25 +32,25 @@ public class AbstractSkiRackTESR<T extends AbstractSkiRackTileEntity> extends Ti
 		BlockState state = tile.getTileEntity().getBlockState();
 		if (items.size() > 0) {
 
-			matrixStack.push();
+			matrixStack.pushPose();
 			matrixStack.scale(0.9f, 1.5f, 0.9f);
 			matrixStack.translate(0f, 0f, 0f);
 
-			Direction direction = state.get(AbstractSkiRackBlock.DIRECTION);
+			Direction direction = state.getValue(AbstractSkiRackBlock.DIRECTION);
 			switch (direction) {
 			case NORTH:
 				break;
 			case EAST:
-				matrixStack.rotate(Vector3f.YP.rotationDegrees(270f));
+				matrixStack.mulPose(Vector3f.YP.rotationDegrees(270f));
 				matrixStack.translate(0f, 0f, -1.1f);
 				break;
 
 			case SOUTH:
-				matrixStack.rotate(Vector3f.YP.rotationDegrees(180f));
+				matrixStack.mulPose(Vector3f.YP.rotationDegrees(180f));
 				matrixStack.translate(-1.1f, 0f, -1.1f);
 				break;
 			case WEST:
-				matrixStack.rotate(Vector3f.YP.rotationDegrees(90f));
+				matrixStack.mulPose(Vector3f.YP.rotationDegrees(90f));
 				matrixStack.translate(-1.1f, 0f, 0f);
 				break;
 
@@ -59,7 +59,7 @@ public class AbstractSkiRackTESR<T extends AbstractSkiRackTileEntity> extends Ti
 			}
 			matrixStack.translate(0.5f, 0.5f, 0.72f);
 			for (int i = 0; i < items.size(); i++) {
-				ItemStack stack = tile.getStackInSlot(i);
+				ItemStack stack = tile.getItem(i);
 				if (i < 2) {
 					if (i == 0) {
 						matrixStack.translate(0.3f, 0f, 0f);
@@ -68,13 +68,13 @@ public class AbstractSkiRackTESR<T extends AbstractSkiRackTileEntity> extends Ti
 					renderItem(stack, partialTicks, matrixStack, buffer, combinedLight);
 				}
 			}
-			matrixStack.pop();
+			matrixStack.popPose();
 		}
 	}
 
 	private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer,
 			int combinedLight) {
-		Minecraft.getInstance().getItemRenderer().renderItem(stack, TransformType.FIXED, combinedLight,
+		Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.FIXED, combinedLight,
 				OverlayTexture.NO_OVERLAY, matrixStack, buffer);
 	}
 }
