@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p p",
+    "pcp",
+    "sss"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:jungle_planks"
+    },
+    "s": {
+      "item": "minecraft:jungle_slab"
+    },
+    "c": {
+      "tag": "forge:chests/wooden"
+    }
+  },
+  "result": {
+    "item": "skiing:jungle_ski_rack"
+  }
+}

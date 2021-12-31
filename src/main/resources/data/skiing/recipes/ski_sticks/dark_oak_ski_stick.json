@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " b ",
+    " b ",
+    " n "
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "skiing:dark_oak_ski_stick",
+    "count": 2
+  }
+}

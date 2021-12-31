@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p p",
+    "pcp",
+    "sss"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:acacia_planks"
+    },
+    "s": {
+      "item": "minecraft:acacia_slab"
+    },
+    "c": {
+      "tag": "forge:chests/wooden"
+    }
+  },
+  "result": {
+    "item": "skiing:acacia_ski_rack"
+  }
+}

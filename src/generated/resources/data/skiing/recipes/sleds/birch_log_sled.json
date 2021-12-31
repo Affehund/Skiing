@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cbb",
+    "tss"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:stick"
+    },
+    "b": {
+      "item": "minecraft:birch_log"
+    },
+    "s": {
+      "item": "minecraft:birch_slab"
+    },
+    "t": {
+      "item": "minecraft:birch_stairs"
+    }
+  },
+  "result": {
+    "item": "skiing:sled",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:birch_log\"}}"
+  }
+}

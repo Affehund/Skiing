@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p p",
+    "pcp",
+    "sss"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:birch_planks"
+    },
+    "s": {
+      "item": "minecraft:birch_slab"
+    },
+    "c": {
+      "tag": "forge:chests/wooden"
+    }
+  },
+  "result": {
+    "item": "skiing:birch_ski_rack"
+  }
+}

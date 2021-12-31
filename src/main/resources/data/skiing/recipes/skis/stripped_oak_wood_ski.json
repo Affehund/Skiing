@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "t  ",
+    " b ",
+    "  b"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:stripped_oak_wood"
+    },
+    "t": {
+      "item": "minecraft:oak_stairs"
+    }
+  },
+  "result": {
+    "item": "skiing:ski",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:stripped_oak_wood\"}}"
+  }
+}

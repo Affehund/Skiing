@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cbb",
+    "tss"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:stick"
+    },
+    "b": {
+      "item": "minecraft:oak_log"
+    },
+    "s": {
+      "item": "minecraft:oak_slab"
+    },
+    "t": {
+      "item": "minecraft:oak_stairs"
+    }
+  },
+  "result": {
+    "item": "skiing:sled",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:oak_log\"}}"
+  }
+}

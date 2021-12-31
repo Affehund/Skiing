@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b  ",
+    " s ",
+    "  b"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:crimson_hyphae"
+    },
+    "s": {
+      "item": "minecraft:crimson_slab"
+    }
+  },
+  "result": {
+    "item": "skiing:snowboard",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:crimson_hyphae\"}}"
+  }
+}

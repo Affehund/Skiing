@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cbb",
+    "tss"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:stick"
+    },
+    "b": {
+      "item": "minecraft:stripped_acacia_wood"
+    },
+    "s": {
+      "item": "minecraft:acacia_slab"
+    },
+    "t": {
+      "item": "minecraft:acacia_stairs"
+    }
+  },
+  "result": {
+    "item": "skiing:sled",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:stripped_acacia_wood\"}}"
+  }
+}

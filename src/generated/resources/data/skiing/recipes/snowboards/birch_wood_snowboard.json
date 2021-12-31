@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b  ",
+    " s ",
+    "  b"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:birch_wood"
+    },
+    "s": {
+      "item": "minecraft:birch_slab"
+    }
+  },
+  "result": {
+    "item": "skiing:snowboard",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:birch_wood\"}}"
+  }
+}

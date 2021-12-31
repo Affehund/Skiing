@@ -1,0 +1,6 @@
+{
+  "parent": "skiing:item/template_ski_stick",
+  "textures": {
+    "layer0": "minecraft:block/acacia_planks"
+  }
+}
