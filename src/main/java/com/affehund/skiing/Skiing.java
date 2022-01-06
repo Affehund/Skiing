@@ -6,7 +6,6 @@ import com.affehund.skiing.core.data.*;
 import com.affehund.skiing.core.init.*;
 import com.affehund.skiing.core.network.PacketHandler;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -14,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -58,6 +58,7 @@ public class Skiing {
         SkiingVillagers.POINTS_OF_INTEREST.register(modEventBus);
         SkiingVillagers.PROFESSIONS.register(modEventBus);
 
+        forgeEventBus.addListener(this::entityJoinWorld);
         forgeEventBus.register(this);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SkiingConfig.COMMON_CONFIG_SPEC,
@@ -79,8 +80,7 @@ public class Skiing {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         if (event.includeServer()) {
-            BlockTagsProvider blockTagsProvider = new BlockTagsGenerator(generator, MOD_ID, existingFileHelper);
-            generator.addProvider(blockTagsProvider);
+            generator.addProvider(new BlockTagsGenerator(generator, MOD_ID, existingFileHelper));
             generator.addProvider(new RecipeGenerator(generator));
             generator.addProvider(new LootTablesGenerator(generator));
         }
@@ -99,5 +99,8 @@ public class Skiing {
                     event.getRegistry().register(blockItem);
                 });
         LOGGER.debug("Registered block items!");
+    }
+
+    private void entityJoinWorld(EntityJoinWorldEvent event) {
     }
 }

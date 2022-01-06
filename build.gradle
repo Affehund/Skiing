@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'com.affehund'
-version = '1.18.1-1.0.0'
+version = '1.18.1-1.0.1'
 
 java {
     archivesBaseName = 'skiing-forge'
@@ -101,7 +101,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.9'
+    minecraft 'net.minecraftforge:forge:1.18.1-39.0.10'
 
     // mixins
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
@@ -111,8 +111,8 @@ dependencies {
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-61")*/
 
     // jei
-    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.0.47:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.0.47")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.2.50:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.2.50")
 }
 
 mixin {

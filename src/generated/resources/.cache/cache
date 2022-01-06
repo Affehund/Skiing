@@ -1,4 +1,4 @@
-888f331d213951f7cb4b26f64ce03d5486cc2c78 assets/skiing/lang/en_us.json
+7b4de9cd46cbccab8fc6f8f857acb55e885a0baf assets/skiing/lang/en_us.json
 9687fcf725bd247a146125ea0fc29b0a03c9d32c assets/skiing/models/item/acacia_ski_rack.json
 0d8969ecef490269b9f7931ecd8c0a71ba9fcf10 assets/skiing/models/item/acacia_ski_stick.json
 614f0993449282ec34259717df2817f2d73be375 assets/skiing/models/item/birch_ski_rack.json
@@ -20,6 +20,7 @@ e1d8ebac7679bc321e0bf0ef59dad33e99955a17 assets/skiing/models/item/spruce_ski_ra
 ff85d441c6aa71f6b176bf6d522db75e48206a7c assets/skiing/models/item/spruce_ski_stick.json
 887600a158fee319ea64aaed26c02a6659757d3e assets/skiing/models/item/warped_ski_rack.json
 88a650af764f9766959fc32d5f9a3394ee173f5f assets/skiing/models/item/warped_ski_stick.json
+b7f516bf9878f6d53cc9aed6da2c673ba9fab6f8 data/minecraft/tags/entity_types/powder_snow_walkable_mobs.json
 e216b204ce6659821bbed6b99100834fe450059e data/skiing/advancements/recipes/skiing/pullovers/black_pullover.json
 b4eb9aa0724ce66c7f77fbae398ec48740a5a637 data/skiing/advancements/recipes/skiing/pullovers/blue_pullover.json
 0f3c62a0331dbd10b16da129961941ea7951d275 data/skiing/advancements/recipes/skiing/pullovers/brown_pullover.json
@@ -181,7 +182,6 @@ d0d81e9a1b11a86eb23af82f4759ef1359d137a1 data/skiing/loot_tables/blocks/jungle_s
 7162d7013673fa206796c3bf2c512a2f5c7692fc data/skiing/loot_tables/blocks/oak_ski_rack.json
 6a8fe5571d98082185ce84dd64ed2b959485d572 data/skiing/loot_tables/blocks/spruce_ski_rack.json
 b825147454140a7d1706affbdf3018e02a683592 data/skiing/loot_tables/blocks/warped_ski_rack.json
-035fd793fd1a5b923aa5f50e20687d46c933c055 data/skiing/recipes/book.json
 a346bcf16d5aa706846155f8de434704f6985f03 data/skiing/recipes/pullovers/black_pullover.json
 c01a7ae78bc8b129c9914087861d449499ad625e data/skiing/recipes/pullovers/blue_pullover.json
 39aef31c7ee8a58775b927ebcb3be26ecbded246 data/skiing/recipes/pullovers/brown_pullover.json
