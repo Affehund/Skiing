@@ -68,7 +68,7 @@ public class MultiTextureEntityRenderer extends EntityRenderer<AbstractMultiText
 
         ResourceLocation resourceLocation;
         try {
-            ResourceLocation sprite = Minecraft.getInstance().getModelManager().getModel(ForgeModelBakery.getInventoryVariant(Objects.requireNonNull(block.getRegistryName()).toString())).getQuads(block.defaultBlockState(), Direction.NORTH, new Random(1), EmptyModelData.INSTANCE).get(0).getSprite().getName();
+            ResourceLocation sprite = Minecraft.getInstance().getModelManager().getModel(ForgeModelBakery.getInventoryVariant(Objects.requireNonNull(block.getRegistryName()).toString())).getQuads(block.defaultBlockState(), Direction.UP, new Random(1), EmptyModelData.INSTANCE).get(0).getSprite().getName();
             resourceLocation = new ResourceLocation(sprite.getNamespace(), "textures/" + sprite.getPath() + ".png");
         } catch (IndexOutOfBoundsException | NullPointerException exception) {
             resourceLocation = DEFAULT_TEXTURE;

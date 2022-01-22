@@ -2,16 +2,19 @@ package com.affehund.skiing.core.init;
 
 import com.affehund.skiing.Skiing;
 import com.affehund.skiing.common.item.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
-import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.List;
+import java.util.Objects;
 
 public class SkiingItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Skiing.MOD_ID);
@@ -30,9 +33,10 @@ public class SkiingItems {
                     new Item.Properties().durability(1561).tab(Skiing.SKIING_TAB)));
 
     static {
-        for (WoodType woodType : WoodType.values().toList()) {
-            ITEMS.register(woodType.name() + "_ski_stick",
-                    () -> new SkiStickItem(new Item.Properties().stacksTo(2).tab(Skiing.SKIING_TAB), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(woodType.name() + "_planks"))));
+        List<Block> skiingBlocks = List.of(Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.ACACIA_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.DARK_OAK_PLANKS, Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
+        for (Block block : skiingBlocks) {
+            ITEMS.register(Objects.requireNonNull(block.getRegistryName()).getPath().replace("_planks", "") + "_ski_stick",
+                    () -> new SkiStickItem(new Item.Properties().stacksTo(2).tab(Skiing.SKIING_TAB), block));
         }
     }
 

@@ -1,6 +1,5 @@
 package com.affehund.skiing.common.block_entity;
 
-import com.affehund.skiing.common.entity.SkiEntity;
 import com.affehund.skiing.common.item.SkiItem;
 import com.affehund.skiing.common.item.SnowboardItem;
 import com.affehund.skiing.core.init.SkiingBlockEntities;
@@ -34,7 +33,7 @@ public class SkiRackBlockEntity extends BlockEntity implements Clearable {
 
     @Override
     public void saveAdditional(@NotNull CompoundTag compoundTag) {
-        super.save(compoundTag);
+        super.saveAdditional(compoundTag);
         ContainerHelper.saveAllItems(compoundTag, this.items);
     }
 
