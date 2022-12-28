@@ -1,4 +1,4 @@
-package com.affehund.skiing.core.compat.jei;
+package com.affehund.skiing.core.compat;
 
 import com.affehund.skiing.Skiing;
 import com.affehund.skiing.core.init.SkiingItems;

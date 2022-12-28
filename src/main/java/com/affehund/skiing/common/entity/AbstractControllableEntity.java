@@ -85,17 +85,30 @@ public abstract class AbstractControllableEntity extends Entity {
             this.setDamageTaken(this.getDamageTaken() - 1.0F);
         }
 
-        this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - (this.isNoGravity() ? 0 : (this.getVelocity() < 0.1 ? 0.25 : -0.1 * Math.log(this.getVelocity()) + 0.03)), this.getDeltaMovement().z);
+        this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - this.getGravity(), this.getDeltaMovement().z);
         this.controlVehicle();
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.checkInsideBlocks();
         this.resetInput();
 
         // default max speed is 72 km/h; without going downwards ~ 43km/h
-/*        if (this.getControllingPassenger() instanceof Player player) {
-            player.displayClientMessage(new TextComponent(this.getVelocity() * 20 * 3.6F + " km/h" + " / " + this.getVelocity()), true);
-        }*/
+        //player.displayClientMessage(new TextComponent(this.getVelocity() * 20 * 3.6F + " km/h" + " / " + this.getVelocity()), true);
     }
+
+    private double getGravity() {
+        var gravityFactor = 0.0;
+        if (!this.isNoGravity())
+            gravityFactor = this.getVelocity() < 0.1 ? 0.2 : -0.1 * Math.log(this.getVelocity()) + 0.03;
+        // displayClientMessage("gravityFactor: " + gravityFactor);
+        return gravityFactor;
+    }
+
+/*    private void displayClientMessage(String text) {
+        if (this.getControllingPassenger() instanceof Player player) {
+            player.displayClientMessage(new TextComponent(text), true);
+        }
+    }*/
+
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
@@ -106,7 +119,7 @@ public abstract class AbstractControllableEntity extends Entity {
         this.markHurt();
 
         this.gameEvent(GameEvent.ENTITY_DAMAGED, source.getEntity());
-        boolean isCreativePlayer = source.getEntity() instanceof Player && ((Player)source.getEntity()).getAbilities().instabuild;
+        boolean isCreativePlayer = source.getEntity() instanceof Player && ((Player) source.getEntity()).getAbilities().instabuild;
         if (isCreativePlayer || this.getDamageTaken() > this.getMaxHealth()) {
             if (!isCreativePlayer && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                 this.dropItem();
@@ -239,8 +252,10 @@ public abstract class AbstractControllableEntity extends Entity {
         float maxBackwardVelocity = this.getMaxReverseVelocity() * calculatedVelocity;
         float velocity = this.slowDown(this.getVelocity());
 
-        if (forwardInput && velocity <= maxForwardVelocity) velocity = Math.min((velocity <= 0 ? 0.1F : velocity) * (1 + this.getAcceleration()), maxForwardVelocity);
-        if (backwardInput && velocity >= -maxBackwardVelocity) velocity = Math.max((velocity >= 0 ? -0.1F : velocity) * (1 + this.getAcceleration()), -maxBackwardVelocity);
+        if (forwardInput && velocity <= maxForwardVelocity)
+            velocity = Math.min((velocity <= 0 ? 0.1F : velocity) * (1 + this.getAcceleration()), maxForwardVelocity);
+        if (backwardInput && velocity >= -maxBackwardVelocity)
+            velocity = Math.max((velocity >= 0 ? -0.1F : velocity) * (1 + this.getAcceleration()), -maxBackwardVelocity);
 
         this.setVelocity(velocity);
 
@@ -274,10 +289,10 @@ public abstract class AbstractControllableEntity extends Entity {
     private float slowDown(float velocity) {
         float deceleration = 0.05F;
         if (velocity < 0) {
-            if(velocity > -0.05) return 0;
+            if (velocity > -0.05) return 0;
             return (velocity * (1 - deceleration)) > 0 ? 0 : (velocity * (1 - deceleration));
         } else {
-            if(velocity < 0.05) return 0;
+            if (velocity < 0.05) return 0;
             return (velocity * (1 - deceleration)) < 0 ? 0 : (velocity * (1 - deceleration));
         }
     }
@@ -286,8 +301,8 @@ public abstract class AbstractControllableEntity extends Entity {
         BlockPos blockPos = new BlockPos(getX(), getY() - 0.1D, getZ());
         BlockState blockState = this.level.getBlockState(blockPos);
 
-        if(SkiingTags.Blocks.SNOWY_BLOCKS.contains(blockState.getBlock())) return 0.6F;
-        else if(blockState.isAir()) return 1.0F;
+        if (blockState.is(SkiingTags.Blocks.SNOWY_BLOCKS)) return 0.6F;
+        else if (blockState.isAir()) return 1.0F;
         else return 0.1F;
     }
 

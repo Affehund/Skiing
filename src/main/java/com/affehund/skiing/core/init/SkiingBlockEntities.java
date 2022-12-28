@@ -2,7 +2,6 @@ package com.affehund.skiing.core.init;
 
 import com.affehund.skiing.Skiing;
 import com.affehund.skiing.common.block_entity.SkiRackBlockEntity;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

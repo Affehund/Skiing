@@ -1,6 +1,5 @@
 package com.affehund.skiing;
 
-import com.affehund.skiing.core.compat.SkiingCompatHandler;
 import com.affehund.skiing.core.config.SkiingConfig;
 import com.affehund.skiing.core.data.*;
 import com.affehund.skiing.core.init.*;
@@ -72,7 +71,6 @@ public class Skiing {
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(SkiingVillagers::initVillagers);
         PacketHandler.registerMessages();
-        SkiingCompatHandler.initCompats();
     }
 
     private void gatherData(GatherDataEvent event) {

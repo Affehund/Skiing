@@ -3,6 +3,7 @@ package com.affehund.skiing.common.item;
 import com.affehund.skiing.Skiing;
 import com.affehund.skiing.client.render.MultiTextureBEWLR;
 import com.affehund.skiing.common.entity.AbstractMultiTextureEntity;
+import com.affehund.skiing.core.util.SkiingTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.NonNullList;
@@ -11,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -128,7 +128,7 @@ public abstract class AbstractMultiTextureItem extends Item {
     @Override
     public void fillItemCategory(@NotNull CreativeModeTab creativeModeTab, @NotNull NonNullList<ItemStack> itemStacks) {
         if (allowdedIn(creativeModeTab)) {
-            BlockTags.getAllTags().getTagOrEmpty(new ResourceLocation(Skiing.MOD_ID, "skiing_materials")).getValues().forEach(block -> {
+            Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(SkiingTags.Blocks.SKIING_MATERIALS).forEach(block -> {
                 ItemStack itemStack = new ItemStack(this);
                 CompoundTag compoundTag = new CompoundTag();
                 compoundTag.putString("skiing_material", Objects.requireNonNull(block.getRegistryName()).toString());

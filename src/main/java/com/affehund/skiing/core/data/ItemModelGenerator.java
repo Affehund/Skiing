@@ -13,12 +13,9 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class ItemModelGenerator extends ItemModelProvider {
-    private final Set<Item> blacklist = new HashSet<>();
 
     public ItemModelGenerator(DataGenerator dataGenerator, String modid, ExistingFileHelper existingFileHelper) {
         super(dataGenerator, modid, existingFileHelper);
@@ -28,7 +25,7 @@ public class ItemModelGenerator extends ItemModelProvider {
     protected void registerModels() {
         for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
             Item item = ForgeRegistries.ITEMS.getValue(id);
-            if (item != null && Skiing.MOD_ID.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
+            if (item != null && Skiing.MOD_ID.equals(id.getNamespace())) {
                 if (item instanceof AbstractMultiTextureItem) {
                     bewlrItem(id, item);
                 } else if (item instanceof PulloverItem) {

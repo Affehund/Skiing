@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'com.affehund'
-version = '1.18.1-1.0.2'
+version = '1.18.2-1.0.3'
 
 java {
     archivesBaseName = 'skiing-forge'
@@ -24,7 +24,7 @@ java {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'official', version: '1.18.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -96,23 +96,20 @@ repositories {
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "https://modmaven.dev"
+        url = "https://modmaven.k-4u.nl"
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.58'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.92'
 
     // mixins
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 
-    // patchouli
-/*    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-61:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-61")*/
-
     // jei
-    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.2.50:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.2.50")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2-common-api:10.2.1.283")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2-forge-api:10.2.1.283")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2-forge:10.2.1.283")
 }
 
 mixin {
