@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:oak_planks"
+    },
+    "c": {
+      "item": "minecraft:stick"
+    },
+    "s": {
+      "item": "minecraft:oak_slab"
+    },
+    "t": {
+      "item": "minecraft:oak_stairs"
+    }
+  },
+  "pattern": [
+    "cbb",
+    "tss"
+  ],
+  "result": {
+    "item": "skiing:sled",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:oak_planks\"}}"
+  }
+}

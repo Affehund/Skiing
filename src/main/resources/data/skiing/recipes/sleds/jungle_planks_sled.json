@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:jungle_planks"
+    },
+    "c": {
+      "item": "minecraft:stick"
+    },
+    "s": {
+      "item": "minecraft:jungle_slab"
+    },
+    "t": {
+      "item": "minecraft:jungle_stairs"
+    }
+  },
+  "pattern": [
+    "cbb",
+    "tss"
+  ],
+  "result": {
+    "item": "skiing:sled",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:jungle_planks\"}}"
+  }
+}

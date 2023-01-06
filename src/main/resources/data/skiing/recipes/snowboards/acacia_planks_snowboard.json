@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:acacia_planks"
+    },
+    "s": {
+      "item": "minecraft:acacia_slab"
+    }
+  },
+  "pattern": [
+    "b  ",
+    " s ",
+    "  b"
+  ],
+  "result": {
+    "item": "skiing:snowboard",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:acacia_planks\"}}"
+  }
+}

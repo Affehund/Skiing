@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "g": [
+      {
+        "item": "minecraft:lime_dye"
+      },
+      {
+        "item": "minecraft:green_dye"
+      }
+    ],
+    "w": {
+      "item": "minecraft:pink_wool"
+    }
+  },
+  "pattern": [
+    "w w",
+    "wgw",
+    "www"
+  ],
+  "result": {
+    "item": "skiing:pullover",
+    "nbt": "{display:{color:14188952}}"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "s": {
+      "item": "minecraft:dark_oak_slab"
+    }
+  },
+  "pattern": [
+    "b  ",
+    " s ",
+    "  b"
+  ],
+  "result": {
+    "item": "skiing:snowboard",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:dark_oak_planks\"}}"
+  }
+}

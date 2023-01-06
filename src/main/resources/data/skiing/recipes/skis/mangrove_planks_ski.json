@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:mangrove_planks"
+    },
+    "t": {
+      "item": "minecraft:mangrove_stairs"
+    }
+  },
+  "pattern": [
+    "t  ",
+    " b ",
+    "  b"
+  ],
+  "result": {
+    "item": "skiing:ski",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:mangrove_planks\"}}"
+  }
+}

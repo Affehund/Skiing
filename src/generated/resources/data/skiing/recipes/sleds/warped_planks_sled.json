@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:warped_planks"
+    },
+    "c": {
+      "item": "minecraft:stick"
+    },
+    "s": {
+      "item": "minecraft:warped_slab"
+    },
+    "t": {
+      "item": "minecraft:warped_stairs"
+    }
+  },
+  "pattern": [
+    "cbb",
+    "tss"
+  ],
+  "result": {
+    "item": "skiing:sled",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:warped_planks\"}}"
+  }
+}

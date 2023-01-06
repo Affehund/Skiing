@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:jungle_planks"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    " b ",
+    " b ",
+    " n "
+  ],
+  "result": {
+    "count": 2,
+    "item": "skiing:jungle_ski_stick"
+  }
+}

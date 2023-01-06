@@ -1,0 +1,60 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_green_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:green_dye"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_lime_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:green_dye"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "skiing:pullovers/purple_pullover"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wool_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:purple_wool"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wool_block",
+      "has_green_dye",
+      "has_lime_dye",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "skiing:pullovers/purple_pullover"
+    ]
+  }
+}
