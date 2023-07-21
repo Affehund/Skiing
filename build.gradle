@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'com.affehund'
-version = '1.18.2-1.0.3'
+version = '1.18.2-1.0.4'
 
 java {
     archivesBaseName = 'skiing-forge'

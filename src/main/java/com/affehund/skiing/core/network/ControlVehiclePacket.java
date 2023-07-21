@@ -46,7 +46,7 @@ public class ControlVehiclePacket {
 
     public void handleUpdateControls(Supplier<NetworkEvent.Context> context) {
         if (Objects.requireNonNull(context.get().getSender()).getVehicle() instanceof AbstractControllableEntity entity) {
-            entity.updateControls(forward, left, backward, right, context.get().getSender());
+            entity.updateControls(forward, backward, left, right, context.get().getSender());
         }
     }
 }
