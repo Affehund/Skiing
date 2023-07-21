@@ -4,7 +4,6 @@ import com.affehund.skiing.common.entity.AbstractControllableEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Objects;
@@ -40,13 +39,15 @@ public class ControlVehiclePacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleUpdateControls(context)));
-        context.get().setPacketHandled(true);
+        if (Dist.CLIENT.isClient()) {
+            context.get().enqueueWork(() -> handleUpdateControls(context));
+            context.get().setPacketHandled(true);
+        }
     }
 
     public void handleUpdateControls(Supplier<NetworkEvent.Context> context) {
         if (Objects.requireNonNull(context.get().getSender()).getVehicle() instanceof AbstractControllableEntity entity) {
-            entity.updateControls(forward, left, backward, right, context.get().getSender());
+            entity.updateControls(forward, backward, left, right, context.get().getSender());
         }
     }
 }
